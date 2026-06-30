@@ -47,7 +47,7 @@
             bacteria (by real species name) or antibiotic. See the
             <a href="#" data-bs-toggle="modal" data-bs-target="#keyModal">Key</a> for what the colors mean.</p>
           <p class="text-muted small mb-1">The antibiotics listed are designed for practice in the United States.</p>
-          <p class="text-muted small mb-0">Last updated: <mark>2026-06-29</mark>. Adapted from
+          <p class="text-muted small mb-0">Last updated: <mark>2026-06-30</mark>. Adapted from
             <a href="https://bugdrugdx.com/">bugdrugdx.com</a>; original © Hunter Ratliff 2023–2024 (MIT).</p>
         </div>
       </details>
@@ -63,7 +63,7 @@
             <div class="abx-toolbar d-flex flex-wrap align-items-center gap-2 mt-2">
               <div class="form-check form-switch m-0">
                 <input class="form-check-input" type="checkbox" id="po-filter">
-                <label class="form-check-label small" for="po-filter">PO available only</label>
+                <label class="form-check-label small" for="po-filter">Systemic PO only</label>
               </div>
               <span class="ms-auto small text-muted" id="selection-count">No agents selected</span>
               <button type="button" class="btn btn-outline-secondary btn-sm py-0" id="clear-selection" hidden>Clear</button>
@@ -296,6 +296,7 @@
               <div class="card-header"><b>Route badges</b></div>
               <ul class="list-group list-group-flush">
                 <li class="list-group-item"><span class="route-badge route-PO">PO</span> Available orally</li>
+                <li class="list-group-item"><span class="route-badge route-PO-restricted">PO*</span> Oral route with a limited, non-systemic indication</li>
                 <li class="list-group-item"><span class="route-badge route-IV">IV</span> Intravenous</li>
                 <li class="list-group-item"><span class="route-badge route-IM">IM</span> Intramuscular</li>
               </ul>

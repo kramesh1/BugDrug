@@ -160,6 +160,7 @@ body {
 .route-PO { background: #2e7d32; }  /* oral  */
 .route-IV { background: #1565c0; }  /* IV    */
 .route-IM { background: #6a1b9a; }  /* IM    */
+.route-PO-restricted { background: #6d4c41; }  /* non-systemic oral indication */
 
 /* --------------------------- Info card ---------------------------- */
 .info-card {

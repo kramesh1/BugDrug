@@ -13,7 +13,7 @@
  *     combined ("best across selected agents") coverage.
  *   - Search antibiotics (name / brand / abbreviation) and bacteria (by real
  *     species name) and jump to the relevant category.
- *   - PO / IV / IM route badges, plus a "PO available only" filter.
+ *   - PO / IV / IM route badges, plus a systemic PO availability filter.
  *
  * CREDIT
  *   Adapted from https://bugdrugdx.com/  (original by Hunter Ratliff, MIT).
@@ -56,16 +56,34 @@ function parseRoutes(str) {
     return out;
 }
 
+function isRestrictedOralRoute(exampleName, route) {
+    const text = `${exampleName || ''} ${route || ''}`.toUpperCase();
+    return /\bPO\b/.test(text) && /(C\s*DIFF|CLOSTRIDIOIDES|CLOSTRIDIUM|COLITIS)/.test(text);
+}
+
 /** Union of all routes across an antibiotic's examples, ordered PO, IV, IM. */
-function abxRoutes(abxId) {
+function abxRoutes(abxId, { systemicOnly = false } = {}) {
     const set = new Set();
     const examples = ANTIBIOTICS[abxId].examples || {};
-    Object.values(examples).forEach(e => parseRoutes(e.route).forEach(r => set.add(r)));
-    return ['PO', 'IV', 'IM'].filter(r => set.has(r));
+    Object.entries(examples).forEach(([name, e]) => {
+        parseRoutes(e.route).forEach(r => {
+            if (r === 'PO' && isRestrictedOralRoute(name, e.route)) {
+                if (!systemicOnly) set.add('PO-restricted');
+                return;
+            }
+            set.add(r);
+        });
+    });
+    return ['PO', 'IV', 'IM', 'PO-restricted'].filter(r => set.has(r));
 }
 
 function routeBadges(abxId) {
-    return abxRoutes(abxId).map(r => `<span class="route-badge route-${r}">${r}</span>`).join('');
+    return abxRoutes(abxId).map(r => {
+        if (r === 'PO-restricted') {
+            return '<span class="route-badge route-PO-restricted" title="Non-systemic oral indication only">PO*</span>';
+        }
+        return `<span class="route-badge route-${r}">${r}</span>`;
+    }).join('');
 }
 
 /** Short label for a bacteria category (reuse the SVG text). */
@@ -251,7 +269,7 @@ function buildAntibiotics() {
             if (a.examples[g].abbv) parts.push(a.examples[g].abbv);
         });
         li.dataset.search = parts.join(' ').replace(/<[^>]+>/g, '').replace(/&\w+;/g, '').toLowerCase();
-        li.dataset.po = abxRoutes(abxId).includes('PO') ? '1' : '0';
+        li.dataset.po = abxRoutes(abxId, { systemicOnly: true }).includes('PO') ? '1' : '0';
 
         li.addEventListener('mouseenter', () => showItem('abx', abxId));
         li.addEventListener('mouseleave', renderBase);

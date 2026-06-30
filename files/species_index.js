@@ -30,7 +30,7 @@ const SPECIES_INDEX = [
     { display: "Proteus mirabilis",     aliases: ["Proteus"],                      categories: ["GNR", "ESBL"],        note: "" },
     { display: "Salmonella",            aliases: ["Salmonella enterica"],          categories: ["GNR"],                note: "" },
     { display: "Shigella",              aliases: [],                               categories: ["GNR"],                note: "" },
-    { display: "Haemophilus influenzae", aliases: ["H. influenzae", "H flu", "Hib"], categories: ["GNR"],             note: "Non-fermenter exception; respiratory GNR" },
+    { display: "Haemophilus influenzae", aliases: ["H. influenzae", "H flu", "Hib"], categories: ["GNR"],             note: "Fastidious respiratory gram-negative coccobacillus" },
     { display: "Moraxella catarrhalis", aliases: ["Moraxella"],                    categories: ["GNR"],                note: "" },
 
     /* ---- AmpC producers (HECK Yes) ---- */
@@ -52,10 +52,10 @@ const SPECIES_INDEX = [
     { display: "DTR Pseudomonas",        aliases: ["DTR PsA", "MDR Pseudomonas", "difficult to treat pseudomonas"], categories: ["DTR"], note: "Difficult-to-treat resistance" },
     { display: "Stenotrophomonas maltophilia", aliases: ["Steno", "Stenotrophomonas", "S. maltophilia"], categories: ["Steno"], note: "" },
     { display: "Acinetobacter baumannii", aliases: ["Acinetobacter", "CRAB"],     categories: ["CRAB"],               note: "CRAB = carbapenem-resistant A. baumannii" },
-    { display: "Burkholderia",           aliases: ["Burkholderia cepacia"],        categories: ["Steno"],              note: "Non-fermenter; treat similar to Steno/MDR" },
+    { display: "Burkholderia",           aliases: ["Burkholderia cepacia"],        categories: ["Other"],              note: "Non-fermenter not well represented by this grid; use susceptibilities" },
 
     /* ---- Staphylococci ---- */
-    { display: "Staphylococcus aureus (MSSA)", aliases: ["MSSA", "Staph aureus", "S. aureus", "methicillin susceptible"], categories: ["MSSA", "MRSA"], note: "Confirm methicillin susceptibility" },
+    { display: "Staphylococcus aureus (MSSA)", aliases: ["MSSA", "Staph aureus", "S. aureus", "methicillin susceptible"], categories: ["MSSA"], note: "Confirm methicillin susceptibility" },
     { display: "Staphylococcus aureus (MRSA)", aliases: ["MRSA", "methicillin resistant staph aureus"], categories: ["MRSA"], note: "" },
     { display: "Staphylococcus epidermidis", aliases: ["S. epidermidis", "coag negative staph", "CoNS", "coagulase negative"], categories: ["SOSA"], note: "Coagulase-negative staph" },
     { display: "Staphylococcus lugdunensis", aliases: ["S. lugdunensis"],         categories: ["SOSA"],               note: "Behaves like Staph aureus" },
@@ -73,7 +73,7 @@ const SPECIES_INDEX = [
 
     /* ---- Enterococci ---- */
     { display: "Enterococcus faecalis", aliases: ["E. faecalis", "VSE"],          categories: ["VSE"],                note: "Usually less resistant than faecium" },
-    { display: "Enterococcus faecium",  aliases: ["E. faecium", "VRE"],           categories: ["VRE", "VSE"],         note: "More often vancomycin-resistant" },
+    { display: "Enterococcus faecium",  aliases: ["E. faecium", "VRE"],           categories: ["VRE"],                note: "Often ampicillin/vancomycin-resistant; susceptible isolates exist" },
 
     /* ---- Anaerobes ---- */
     { display: "Bacteroides fragilis",  aliases: ["Bacteroides"],                 categories: ["anaerobes"],          note: "GN anaerobe; intra-abdominal" },
