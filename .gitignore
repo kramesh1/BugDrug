@@ -1,4 +1,5 @@
 
-CSV/~$Data.xlsx
-v3/files/CSV_data/~$Data.xlsx
-files/CSV_data/~$Data.xlsx
+.DS_Store
+*.log
+~$*.xlsx
+.vscode/
