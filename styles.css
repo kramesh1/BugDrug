@@ -1,56 +1,241 @@
+/* ===========================================================================
+   BugDrug — modern stylesheet (Bootstrap 5 base + custom)
+   Coverage/association color semantics are preserved from the original.
+   =========================================================================== */
 
-.list-group-item, .card-header {
-    padding: 5px 10px
+:root {
+    /* Category (base) fills for the SVG bug table */
+    --c-gn:   #e7298a;
+    --c-gp:   #7570b3;
+    --c-ana:  #1b9e77;
+    --c-atyp: #d95f02;
+    --c-other:#424242;
+
+    /* Coverage / association palette */
+    --c-good:  51, 160, 44;   /* green */
+    --c-orange:255, 127, 0;   /* some  */
+    --c-blue:  31, 120, 180;  /* com / occ */
+    --c-red:   227, 26, 28;   /* bad   */
+    --c-grey:  66, 66, 66;    /* na    */
+    --c-yellow:255, 255, 0;   /* note / unk */
+
+    --header-bg: linear-gradient(135deg, #16324f 0%, #1f78b4 100%);
+    --surface: #ffffff;
+    --bg: #f4f6f9;
+    --radius: 12px;
+    --shadow: 0 1px 3px rgba(0,0,0,.08), 0 4px 12px rgba(0,0,0,.05);
 }
 
-li.myclass {
-  background: rgb(51,160,44,0.8)
-}
-li.myclass2 {
-  background: rgb(51,160,44,0.4)
+body {
+    background: var(--bg);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: #1f2933;
 }
 
-/* Styles used for SVG */
+/* ----------------------------- Header ----------------------------- */
+.app-header {
+    background: var(--header-bg);
+    color: #fff;
+    padding: .75rem 0;
+    box-shadow: var(--shadow);
+    position: sticky;
+    top: 0;
+    z-index: 1030;
+}
+.app-title { font-size: 1.6rem; font-weight: 700; letter-spacing: .5px; }
+.app-subtitle { font-size: .85rem; opacity: .85; }
+
+/* ----------------------------- Intro ------------------------------ */
+.intro-box {
+    background: var(--surface);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: .75rem 1rem;
+}
+.intro-box > summary {
+    cursor: pointer;
+    font-weight: 600;
+    color: #1f78b4;
+}
+.legend-chip {
+    display: inline-block;
+    padding: 0 .4rem;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: .9em;
+}
+.syndromes-chip { background: rgba(var(--c-blue), .2); }
+.bug-chip       { background: rgba(231, 41, 138, .15); }
+.abx-chip       { background: rgba(var(--c-good), .2); }
+
+/* --------------------- Column heads / search ---------------------- */
+.column-head {
+    position: sticky;
+    top: 64px;
+    background: var(--bg);
+    z-index: 5;
+    padding-bottom: .25rem;
+}
+.column-head h3 { font-size: 1.15rem; font-weight: 700; }
+.search-results {
+    position: absolute;
+    left: 0; right: 0;
+    z-index: 50;
+    max-height: 320px;
+    overflow-y: auto;
+    border-radius: 0 0 var(--radius) var(--radius);
+}
+.search-results .bug-result { cursor: pointer; }
+.search-results .bug-result:hover { background: rgba(var(--c-blue), .08); }
+.result-name { font-weight: 600; }
+.cat-pill {
+    display: inline-block;
+    font-size: .7rem;
+    font-weight: 600;
+    background: #e2e8f0;
+    color: #334155;
+    border-radius: 999px;
+    padding: .05rem .45rem;
+    margin-left: .15rem;
+    vertical-align: middle;
+}
+.abx-toolbar { font-size: .85rem; }
+
+/* ------------------------- Antibiotic cards ----------------------- */
+.abx-card {
+    border: none;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    margin-bottom: .6rem;
+    overflow: hidden;
+}
+.abx-card .card-header {
+    background: #1f2933;
+    color: #fff;
+    font-weight: 600;
+    font-size: .85rem;
+    padding: .4rem .75rem;
+    border: none;
+}
+.list-group-item, .card-header { padding: 5px 10px; }
+
+.abx-item, .syndrome-item {
+    cursor: pointer;
+    transition: background .12s ease, padding-left .12s ease;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: .4rem;
+    border-left: 3px solid transparent;
+}
+.abx-item:hover, .syndrome-item:hover { background: rgba(var(--c-blue), .08); }
+.abx-name { line-height: 1.1; }
+.abx-routes { white-space: nowrap; }
+
+/* Selected (pinned) antibiotic */
+.abx-item.selected {
+    background: rgba(var(--c-good), .14);
+    border-left-color: rgb(var(--c-good));
+    font-weight: 600;
+    padding-left: 8px;
+}
+.abx-item.selected .abx-name::before {
+    content: "✓ ";
+    color: rgb(var(--c-good));
+    font-weight: 700;
+}
+
+/* ------------------------- Route badges --------------------------- */
+.route-badge {
+    display: inline-block;
+    font-size: .62rem;
+    font-weight: 700;
+    line-height: 1;
+    padding: .2rem .3rem;
+    border-radius: 4px;
+    margin-left: .15rem;
+    color: #fff;
+    letter-spacing: .3px;
+}
+.route-PO { background: #2e7d32; }  /* oral  */
+.route-IV { background: #1565c0; }  /* IV    */
+.route-IM { background: #6a1b9a; }  /* IM    */
+
+/* --------------------------- Info card ---------------------------- */
+.info-card {
+    border: none;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
+.cover-partial { color: #b36b00; }
+
+/* ===========================================================================
+   SVG bug table
+   =========================================================================== */
+#bug-table { display: block; }
+
 text {
     text-anchor: middle;
     dominant-baseline: middle;
-  }
-  
-  rect {
-    stroke:black;
-    opacity:0.6;
-  }
+    pointer-events: none;       /* clicks pass through to the rect handler */
+    font-size: 13px;
+    font-weight: 600;
+    fill: #1a1a1a;
+}
 
-  rect.GN {fill: #e7298a;} /* #e7298a */
-  rect.GP {fill: #7570b3;} /* #7570b3 */
-  rect.ana {fill: #1b9e77;} /* #1b9e77 */
-  rect.atyp {fill: #d95f02;} /* #d95f02 */
-  rect.other {fill: #424242;} /* #f5f7a5 */
+rect {
+    stroke: #ffffff;
+    stroke-width: 1.5;
+    opacity: .82;
+}
+.bug-hit { cursor: pointer; }
+rect.toggleable { transition: opacity .12s ease, fill .12s ease; }
+rect.toggleable:hover { opacity: 1; }
 
-  rect.active {
-    fill: rgb(51,160,44);opacity:0.8;
-  }
+/* Category base fills */
+rect.GN    { fill: var(--c-gn); }
+rect.GP    { fill: var(--c-gp); }
+rect.ana   { fill: var(--c-ana); }
+rect.atyp  { fill: var(--c-atyp); }
+rect.other { fill: var(--c-other); }
 
-  /* For antibiotics */
-  rect.good  {fill: #33a02c;opacity:0.8;}
-  li.good    {background: rgb(51,160,44,0.8)}
-  rect.broad  {fill: #33a02c;opacity:0.4;}
-  li.broad    {background: rgb(51,160,44,0.4)}
-  rect.some {fill: #ff7f00;opacity:0.4;}
-  li.some   {background: rgb(255,127,0,0.4)}
+/* Coverage (antibiotics) */
+rect.good  { fill: rgb(var(--c-good)); opacity: .85; }
+li.good    { background: rgba(var(--c-good), .8); }
+rect.broad { fill: rgb(var(--c-good)); opacity: .42; }
+li.broad   { background: rgba(var(--c-good), .4); }
+rect.some  { fill: rgb(var(--c-orange)); opacity: .5; }
+li.some    { background: rgba(var(--c-orange), .4); }
 
-  /* For syndromes */
-  rect.com  {fill: #1f78b4;opacity:0.8;}
-  li.com    {background: rgb(31,120,180,0.8)}
-  rect.occ   {fill: #1f78b4;opacity:0.4;}
-  li.occ    {background: rgb(31,120,180,0.4)}
+/* Association (syndromes) */
+rect.com   { fill: rgb(var(--c-blue)); opacity: .85; }
+li.com     { background: rgba(var(--c-blue), .8); }
+rect.occ   { fill: rgb(var(--c-blue)); opacity: .42; }
+li.occ     { background: rgba(var(--c-blue), .4); }
 
-  /* both */
-  rect.bad   {fill: #e31a1c;opacity:0.4;}
-  li.bad     {background: rgb(227,26,28, 0.4)}
-  rect.na    {fill: #424242;opacity:0.4;}
-  li.na     {background: rgb(66,66,66,0.4)}
-  rect.unk    {fill: #FFFF00;opacity:0.8;}
-  li.unk     {background: rgb(255,255,0,0.8)}
-  rect.note    {fill: #FFFF00;opacity:0.4;}
-  li.note     {background: rgb(255,255,0,0.4)}
+/* Shared */
+rect.bad   { fill: rgb(var(--c-red)); opacity: .45; }
+li.bad     { background: rgba(var(--c-red), .4); }
+rect.na    { fill: rgb(var(--c-grey)); opacity: .4; }
+li.na      { background: rgba(var(--c-grey), .4); }
+rect.unk   { fill: rgb(var(--c-yellow)); opacity: .85; }
+li.unk     { background: rgba(var(--c-yellow), .8); }
+rect.note  { fill: rgb(var(--c-yellow)); opacity: .45; }
+li.note    { background: rgba(var(--c-yellow), .4); }
+
+/* Pulse used when jumping to a category from bacteria search */
+@keyframes bug-pulse {
+    0%   { stroke: #ffd400; stroke-width: 1.5; }
+    30%  { stroke: #ffd400; stroke-width: 6; }
+    100% { stroke: #ffffff; stroke-width: 1.5; }
+}
+rect.pulse { animation: bug-pulse 1.6s ease-out; stroke: #ffd400; }
+
+/* ----------------------------- Modals ----------------------------- */
+.modal-body .card { border-radius: 10px; }
+
+/* --------------------------- Responsive --------------------------- */
+@media (max-width: 991.98px) {
+    .column-head { position: static; }
+    .app-header { position: static; }
+}

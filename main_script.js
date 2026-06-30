@@ -1,312 +1,385 @@
 /**
- * @summary The main JS file used for the webpage
- * 
- * DEPENDENCIES
- * Before this script is run, have the HTML file run: 
- * 
- *   1. *parseCSV.js* to import the function `csvToJS()` and the strings 
- *      `CSV_SYNDROME` and `CSV_ANTIBIOTICS`. Running the csvToJS() function on
- *      these strings is used to get the classes that should be applied to the
- *      syndrome-bacteria (e.g. cellulitis can be caused by MRSA) and 
- *      antibiotic-bacteria (e.g vanc can treat MRSA) pairs
- *      
- *   2. *static_objects.js* to import the JSON objects `ANTIBIOTICS`, `BACTERIA`,
- *      and `SYNDROMES`. These are lists of the antibiotics, bacteria, and 
- *      syndromes that are used to generate the lists in the HTML document (that
- *      appear on either side of the SVG). These objects also define the text 
- *      that gets populated in the box under the SVG
- *  
+ * @summary Main script for the BugDrug webpage (vanilla JS, no jQuery).
+ *
+ * DEPENDENCIES (loaded before this file in index.html):
+ *   1. parseCSV.js       -> csvToJS(), CSV_SYNDROME, CSV_ANTIBIOTICS
+ *   2. static_objects.js -> ANTIBIOTICS, BACTERIA, SYNDROMES
+ *   3. species_index.js  -> SPECIES_INDEX (species -> category lookup)
+ *
+ * FEATURES
+ *   - Hover (or tap) any syndrome / bacteria / antibiotic to preview its
+ *     relationships and notes (original behavior, jQuery-free).
+ *   - Click one or more antibiotics to PIN them; the bug grid then shows the
+ *     combined ("best across selected agents") coverage.
+ *   - Search antibiotics (name / brand / abbreviation) and bacteria (by real
+ *     species name) and jump to the relevant category.
+ *   - PO / IV / IM route badges, plus a "PO available only" filter.
+ *
  * CREDIT
- * Adapted from the website https://bugdrugdx.com/
- * 
- * @author Hunter Ratliff
- * @link https://github.com/HunterRatliff1/BugDrug
- * @link https://bugdrugdx.com/
- * 
- * Created on    : 2023-12-31
- * Last modified : 2024-01-17
- * 
+ *   Adapted from https://bugdrugdx.com/  (original by Hunter Ratliff, MIT).
+ *
  * @license MIT
- * Copyright (c) 2023 Hunter Ratliff
- * Permission is hereby granted, free of charge, to any person obtaining a copy 
- * of this software and associated documentation files (the "Software"), to 
- * deal in the Software without restriction, including without limitation the 
- * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or 
- * sell copies of the Software, and to permit persons to whom the Software is 
- * furnished to do so, subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall be included in 
- * all copies or substantial portions of the Software.
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER 
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING 
- * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
- * IN THE SOFTWARE.
- * 
  */
-
 
 /******************************************************************************\
- * SECTION I
- * Define helper functions
+ * SECTION I — Precomputed lookups & state
  \*****************************************************************************/
 
-/** clearHighlights - Removes any old highlights
- * 
- * This serves as a helper function to reset the webpage to it's default state,
- * primarily when the user is no longer hovering over an element. First it
- * removes the custom classes from any of the toggleable elements (.toggleable).
- * 
- * It also resets the text in the box below the SVG to look like it did when you
- * first load the page
- * 
- * @param {Array=} cls Array of HTML classes to be removed, in addition to the 
- *                     default classes. These classes are the classes used in 
- *                     the CSV file
- */
-function clearHighlights(cls=["note", "unk"]) {
-    var toRemove = "good some broad bad na com occ" + " " + cls.join(" ");
-
-    // Remove all of the classes that amy have been added
-    $( ".toggleable").removeClass(toRemove);
-  
-    // Reset the text in the box to the default
-    $( "#box-title" ).html("Hover to begin");
-    $( "#box-subtitle" ).html("");
-    $( "#box-text" ).html("Hover over a syndrome, bacteria, or antibiotics to get started<br><br><br>");
+// csvToJS() is pure JS; compute the four relationship maps once.
+const LOOKUPS = {
+    abxToBugs: csvToJS(CSV_ANTIBIOTICS, false), // {abxId: {bugId: coverageClass}}
+    bugToAbx:  csvToJS(CSV_ANTIBIOTICS, true),  // {bugId: {abxId: coverageClass}}
+    synToBugs: csvToJS(CSV_SYNDROME,  false),   // {synId: {bugId: assocClass}}
+    bugToSyn:  csvToJS(CSV_SYNDROME,  true)     // {bugId: {synId: assocClass}}
 };
 
+// Coverage classes that get toggled on/off (base colors like GN/GP are kept).
+const HILITE_CLASSES = ['good', 'broad', 'some', 'bad', 'na', 'com', 'occ', 'note', 'unk'];
 
-/** addHighlights - Adds respective classes to DOM elements by ID 
- * 
- * This expects a list of **key:value pairs**, where the key is the ID attribute  
- * of the DOM element, and the value is the CSS class to be applied to that 
- * element. If a class is not specified (i.e. the value == ''), the the default
- * class will be applied, as defined by `defaultClass`. Note: the CSS classes 
- * need to be defined in `styles.css`. This function doesn't check to see if the 
- * class you applied is valid
- * 
- * An example input could be `{GNR:'good', PsA:'bad', AmpC:''}` or 
- * `{UTI:'good', HAP:'some', SSTI:'some'}`
- * 
- * 
- * @param {JSON}    listOfIDs    - An object of key:value pairs, where the key
- *                                 is the ID attribute of the HTML element and 
- *                                 the value is the class to be applied to that
- *                                 element.
- * @param {string=} defaultClass - The class to be applied if no class is given.
- *                                 This defaults to "na". 
- * 
- * @example
- * var myObj = {GNR:"good",PsA:"bad", AmpC:""};
- * addHighlights(myObj);
- * 
- * // Same as if you ran the code below
- *  $("#GNR").addClass("good");
- *  $("#PsA").addClass("bad");
- *  $("#AmpC").addClass("na");
- * 
- * @see clearHighlights to reverse the changes made here
- */
-function addHighlights(listOfIDs, defaultClass="na") {
-    Object.keys(listOfIDs).forEach(function(key){
-        var id = '#' + key;
-        var classToAdd = listOfIDs[key];
-        if (classToAdd=='') {classToAdd = defaultClass;}
-        $(id).addClass(classToAdd);
-    });
-};
+// Rank used to pick the "best" coverage across multiple selected antibiotics.
+const COVERAGE_RANK = { good: 5, broad: 4, some: 3, note: 2, bad: 1, na: 0 };
 
+const pinned = new Set(); // ids of pinned (selected) antibiotics
+let stuck = null;         // {type:'bug'|'syndrome', id} pinned via tap (touch support)
 
-/** addInfoBox - Populate the HTML for the info box
- * 
- * This helps to pipe HTML strings into the info box (located under the SVG).
- * The relevant HTML code is listed below 
- * 
-    <div class="card-body">
-        <h5 id="box-title" class="card-title">   TITLE GOES HERE   </h5>
-        <h6 id="box-subtitle" class="card-subtitle">   OPTIONAL SUBTITLE   </h6>
-        <p id="box-text" class="card-text">   TEXT GOES HERE   </p>
-    </div>
- *    
- * @param {string=} title  - HTML code to be used as title text. If left blank,
- *                           and subtitle is not blank, the the subtitle will
- *                           replace the title. 
- * @param {string} text    - Bulk of the HTML code to be used in the body of the
- *                           card.
- * @param {JSON=} subtitle - Optional JSON object that gets special formatting.
- *                           See the code for details.
- * 
- * @example
- * addInfoBox(title="Your title", text="Your text");
- * 
- * // Using the special subtitle
- * var exampleText = "Aminoglycosides are super nephrotoxic";
- * var exampleSubtitle = {
- *      Amikacin: {route: "IV"},
- *      Gentamicin: {route: "IV", trade:"Garamycin"},
- *      Tobramycin: {route: "IV"}
- * };
- * addInfoBox(title="", text=exampleText, subtitle=exampleSubtitle);
- * 
- */
-function addInfoBox(title="", text="", subtitle="") {
+/******************************************************************************\
+ * SECTION II — Small helpers
+ \*****************************************************************************/
 
-    /**
-     * For cases when the subtitle is not a string, we're going to assume that
-     * it's a complex object, like `ANTIBIOTICS.MEM.examples`, that contains
-     * the generic antibiotic name as the key, and additional (optional) 
-     * key:value pairs listing parameters (namely, route, trade, and abbv).
-     * 
-     * The goal is to get the JSON data below:
-     * {
-     *    Meropenem: {route: "IV", trade: "Merrem"},
-     *    Doripenem: {route: "IV"},
-     *    "Imipenem-Cilastatin": {route: "IV", trade: "Primaxin", abbv: "IPM-CLN"}
-     *  }
-     * 
-     * To output formatted text like this:
-     * Meropenem (Merrem, IV) / Doripenem (IV) / Imipenem-Cilastatin [IPM-CLN] (Primaxin, IV)
-     */
-    if(typeof(subtitle)!=="string"){
-        var output = []; // An array to push results to (e.g. list of abx)
-        
-        /** For each antibiotic that is given, run through the code below */ 
-        Object.keys(subtitle).forEach(function(key){
-            var item = subtitle[key];
-            var html = "";  // This will be the html code for the item
-
-            // Start by adding the key (generic name of the abx)
-            html += key;
-
-            // If an abbreviation is given, add it after the name
-            if(item.abbv != undefined){
-                html += ' <small>[' + item.abbv + ']</small>';
-            }
-
-            /** Now we're to the stuff that goes in the parentheses. One or more 
-             *  of these may not be defined, and we only want the parentheses
-             *  to show up if at least one is defined */
-            var parenth = [];
-            if(item.trade != undefined){
-                parenth.push('<span class="text-info">' + item.trade + '</span>');
-            }
-            if(item.route != undefined){
-                parenth.push(item.route);
-            }
-            if(parenth.length>0){ // Only run if at least one is defined
-                html += ' (' + parenth.join(", ") + ')';
-            }
-
-            output.push(html);
-        });
-
-        subtitle = output.join(" / ");
-    }
-
-    // If given subtitle w/o title, switch the two
-    if(title=="" & subtitle!=""){
-        title = subtitle;
-        subtitle = "";
-    }
-
-    $( "#box-title" ).html(title);
-    $( "#box-subtitle" ).html(subtitle);
-    $( "#box-text" ).html(text);
-
+/** Tokenize a free-text route string into PO / IV / IM. */
+function parseRoutes(str) {
+    const s = (str || '').toUpperCase();
+    const out = [];
+    if (/\bPO\b|ORAL/.test(s)) out.push('PO');
+    if (/\bIV\b/.test(s))      out.push('IV');
+    if (/\bIM\b/.test(s))      out.push('IM');
+    return out;
 }
 
+/** Union of all routes across an antibiotic's examples, ordered PO, IV, IM. */
+function abxRoutes(abxId) {
+    const set = new Set();
+    const examples = ANTIBIOTICS[abxId].examples || {};
+    Object.values(examples).forEach(e => parseRoutes(e.route).forEach(r => set.add(r)));
+    return ['PO', 'IV', 'IM'].filter(r => set.has(r));
+}
+
+function routeBadges(abxId) {
+    return abxRoutes(abxId).map(r => `<span class="route-badge route-${r}">${r}</span>`).join('');
+}
+
+/** Short label for a bacteria category (reuse the SVG text). */
+function labelFor(catId) {
+    const t = document.getElementById(catId + '-txt');
+    return t ? t.textContent.trim() : catId;
+}
+
+/** Port of the original addInfoBox subtitle formatter for examples objects. */
+function formatExamples(subtitle) {
+    if (typeof subtitle === 'string') return subtitle;
+    const output = [];
+    Object.keys(subtitle).forEach(key => {
+        const item = subtitle[key];
+        let html = key;
+        if (item.abbv) html += ' <small>[' + item.abbv + ']</small>';
+        const paren = [];
+        if (item.trade) paren.push('<span class="text-info">' + item.trade + '</span>');
+        if (item.route) paren.push(item.route);
+        if (paren.length) html += ' (' + paren.join(', ') + ')';
+        output.push(html);
+    });
+    return output.join(' / ');
+}
+
+function infoBox(title = '', text = '', subtitle = '') {
+    let sub = formatExamples(subtitle);
+    if (title === '' && sub !== '') { title = sub; sub = ''; }
+    document.getElementById('box-title').innerHTML = title;
+    document.getElementById('box-subtitle').innerHTML = sub;
+    document.getElementById('box-text').innerHTML = text;
+}
+
+/** Remove coverage highlights from every toggleable element. */
+function clearHighlights() {
+    document.querySelectorAll('.toggleable').forEach(el => el.classList.remove(...HILITE_CLASSES));
+}
+
+/** Apply a {id: class} map; blank class falls back to defaultClass. */
+function applyHighlights(map, defaultClass = 'na') {
+    if (!map) return;
+    Object.keys(map).forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.classList.add(map[id] || defaultClass);
+    });
+}
 
 /******************************************************************************\
- * SECTION II
- * Implement the code
+ * SECTION III — Rendering
  \*****************************************************************************/
-$( document ).ready(function() {
 
-    //$('#disclaimerModal').modal('show');
+/** Transient preview of a single item (used on hover and tap). */
+function showItem(type, id) {
+    clearHighlights();
+    if (type === 'abx') {
+        const a = ANTIBIOTICS[id];
+        applyHighlights(LOOKUPS.abxToBugs[id]);
+        infoBox(a.fullName, a.comments, a.examples);
+    } else if (type === 'syndrome') {
+        const s = SYNDROMES[id];
+        applyHighlights(LOOKUPS.synToBugs[id]);
+        infoBox(s.fullName, s.comments);
+    } else if (type === 'bug') {
+        const b = BACTERIA[id];
+        applyHighlights(LOOKUPS.bugToSyn[id]);
+        applyHighlights(LOOKUPS.bugToAbx[id]);
+        infoBox(b.name, b.comments, b.bugExamples);
+    }
+}
 
-    // For the bag table, add classes to the parts of the SVG
-    $( "#bug-table rect" ).each(function() {
-        $( this ).addClass( "bugs" );
-        $( this ).addClass( "toggleable" );
+/** Best coverage class for a bug across all pinned antibiotics. */
+function bestCoverage(bugId) {
+    let best = '', bestRank = -1;
+    pinned.forEach(abxId => {
+        const cls = (LOOKUPS.abxToBugs[abxId] || {})[bugId] || '';
+        const rank = COVERAGE_RANK[cls] !== undefined ? COVERAGE_RANK[cls] : 0;
+        if (rank > bestRank) { bestRank = rank; best = cls; }
+    });
+    return best;
+}
+
+/** Combined-coverage view for the set of pinned antibiotics. */
+function renderCombination() {
+    clearHighlights();
+    const covered = [], partial = [], gaps = [];
+
+    Object.keys(BACTERIA).forEach(bugId => {
+        const cls = bestCoverage(bugId);
+        const rank = COVERAGE_RANK[cls] || 0;
+        const el = document.getElementById(bugId);
+        if (el) el.classList.add(cls || 'na');
+
+        const label = labelFor(bugId);
+        if (rank >= 4) covered.push(label);
+        else if (rank >= 2) partial.push(label);
+        else gaps.push(label);
     });
 
-    /*** For each syndrome listed in the SYNDROMES object ***/
-    Object.keys(SYNDROMES).forEach(function(syn) {
-        var syndrome = SYNDROMES[syn];
+    const agents = [...pinned];
+    const title = `Combined coverage — ${agents.length} agent${agents.length > 1 ? 's' : ''}`;
+    const subtitle = agents
+        .map(a => `${ANTIBIOTICS[a].name} ${routeBadges(a)}`)
+        .join(' &nbsp;<b>+</b>&nbsp; ');
+    const text =
+        `<p class="mb-1"><b class="text-success">Covered:</b> ${covered.join(', ') || '—'}</p>` +
+        `<p class="mb-1"><b class="cover-partial">Variable / partial:</b> ${partial.join(', ') || '—'}</p>` +
+        `<p class="mb-0"><b class="text-danger">Gaps:</b> ${gaps.join(', ') || '—'}</p>`;
+    infoBox(title, text, subtitle);
+}
 
-        // Generate the HTML for the list, and add it to the page
-        var html = '<li id="' + syn + '">' + syndrome.name + '</li>';
-        $( "#list-syndrome" ).append(html);
-        $( '#' + syn).addClass( "syndromes" );
-        $( '#' + syn).addClass( "toggleable" );
-        $( '#' + syn).addClass( "list-group-item" );
+/** Restore the base view after a hover preview ends. */
+function renderBase() {
+    clearHighlights();
+    if (stuck) { showItem(stuck.type, stuck.id); return; }
+    if (pinned.size > 0) { renderCombination(); return; }
+    infoBox('Hover to begin',
+        'Hover over a syndrome, bacteria, or antibiotic to get started. Click antibiotics to compare combined coverage.');
+}
 
-        // When you hover over the **syndrome**...
-        $( '#'+syn).on( "mouseenter", function(){
-            addHighlights(csvToJS(CSV_SYNDROME, false)[syn]), // highlight the **bugs**
-            addInfoBox(syndrome.fullName, syndrome.comments)
-        } );
-        $( '#'+syn).on( "mouseleave", function(){clearHighlights()} );
+function updateToolbar() {
+    const n = pinned.size;
+    document.getElementById('selection-count').textContent =
+        n === 0 ? 'No agents selected' : `${n} agent${n > 1 ? 's' : ''} selected`;
+    document.getElementById('clear-selection').hidden = (n === 0 && !stuck);
+}
+
+/******************************************************************************\
+ * SECTION IV — Interaction handlers
+ \*****************************************************************************/
+
+function togglePin(abxId) {
+    stuck = null; // pinning an antibiotic exits a stuck bug/syndrome view
+    const li = document.getElementById(abxId);
+    if (pinned.has(abxId)) {
+        pinned.delete(abxId);
+        if (li) li.classList.remove('selected');
+    } else {
+        pinned.add(abxId);
+        if (li) li.classList.add('selected');
+    }
+    updateToolbar();
+    renderBase();
+}
+
+function toggleStuck(type, id) {
+    stuck = (stuck && stuck.id === id) ? null : { type, id };
+    updateToolbar();
+    renderBase();
+}
+
+function clearAll() {
+    pinned.forEach(id => {
+        const li = document.getElementById(id);
+        if (li) li.classList.remove('selected');
+    });
+    pinned.clear();
+    stuck = null;
+    updateToolbar();
+    renderBase();
+}
+
+/******************************************************************************\
+ * SECTION V — Build the page
+ \*****************************************************************************/
+
+function buildAntibiotics() {
+    Object.keys(ANTIBIOTICS).forEach(abxId => {
+        const a = ANTIBIOTICS[abxId];
+
+        const li = document.createElement('li');
+        li.id = abxId;
+        li.className = 'list-group-item abx-item toggleable';
+        li.innerHTML =
+            `<span class="abx-name">${a.name}</span>` +
+            `<span class="abx-routes">${routeBadges(abxId)}</span>`;
+
+        // Searchable text + PO flag (used by the filter)
+        const parts = [abxId, a.name, a.fullName || ''];
+        Object.keys(a.examples || {}).forEach(g => {
+            parts.push(g);
+            if (a.examples[g].trade) parts.push(a.examples[g].trade);
+            if (a.examples[g].abbv) parts.push(a.examples[g].abbv);
+        });
+        li.dataset.search = parts.join(' ').replace(/<[^>]+>/g, '').replace(/&\w+;/g, '').toLowerCase();
+        li.dataset.po = abxRoutes(abxId).includes('PO') ? '1' : '0';
+
+        li.addEventListener('mouseenter', () => showItem('abx', abxId));
+        li.addEventListener('mouseleave', renderBase);
+        li.addEventListener('click', () => togglePin(abxId));
+
+        const list = document.querySelector('#' + a.abxClass + ' ul');
+        if (list) list.appendChild(li);
+    });
+}
+
+function buildSyndromes() {
+    const container = document.getElementById('list-syndrome');
+    Object.keys(SYNDROMES).forEach(synId => {
+        const li = document.createElement('li');
+        li.id = synId;
+        li.className = 'list-group-item syndrome-item toggleable';
+        li.textContent = SYNDROMES[synId].name;
+        li.addEventListener('mouseenter', () => showItem('syndrome', synId));
+        li.addEventListener('mouseleave', renderBase);
+        li.addEventListener('click', () => toggleStuck('syndrome', synId));
+        container.appendChild(li);
+    });
+}
+
+function buildBugs() {
+    Object.keys(BACTERIA).forEach(bugId => {
+        const rect = document.getElementById(bugId);
+        const txt = document.getElementById(bugId + '-txt');
+        if (!rect) return;
+        rect.classList.add('toggleable');
+
+        const enter = () => showItem('bug', bugId);
+        const click = () => toggleStuck('bug', bugId);
+        [rect, txt].forEach(el => {
+            if (!el) return;
+            el.classList.add('bug-hit');
+            el.addEventListener('mouseenter', enter);
+            el.addEventListener('mouseleave', renderBase);
+            el.addEventListener('click', click);
+        });
+    });
+}
+
+function setupAntibioticFilter() {
+    const search = document.getElementById('abx-search');
+    const poFilter = document.getElementById('po-filter');
+
+    function apply() {
+        const q = search.value.trim().toLowerCase();
+        const poOnly = poFilter.checked;
+        document.querySelectorAll('.abx-item').forEach(li => {
+            const matchesQ = !q || li.dataset.search.includes(q);
+            const matchesPO = !poOnly || li.dataset.po === '1';
+            li.hidden = !(matchesQ && matchesPO);
+        });
+        // Hide cards that have no visible items
+        document.querySelectorAll('.abx-card').forEach(card => {
+            card.hidden = !card.querySelector('.abx-item:not([hidden])');
+        });
+    }
+
+    search.addEventListener('input', apply);
+    poFilter.addEventListener('change', apply);
+}
+
+function setupBugSearch() {
+    const search = document.getElementById('bug-search');
+    const results = document.getElementById('bug-search-results');
+
+    function hideResults() { results.hidden = true; }
+
+    search.addEventListener('input', () => {
+        const q = search.value.trim().toLowerCase();
+        if (!q) { results.innerHTML = ''; hideResults(); return; }
+
+        const matches = SPECIES_INDEX.filter(s =>
+            s.display.toLowerCase().includes(q) ||
+            (s.aliases || []).some(a => a.toLowerCase().includes(q))
+        ).slice(0, 12);
+
+        if (!matches.length) {
+            results.innerHTML = '<li class="list-group-item text-muted">No matching species</li>';
+            results.hidden = false;
+            return;
+        }
+
+        results.innerHTML = matches.map(m => {
+            const cats = m.categories.map(c => `<span class="cat-pill">${labelFor(c)}</span>`).join(' ');
+            return `<li class="list-group-item bug-result" role="button" ` +
+                `data-cats="${m.categories.join(',')}" data-primary="${m.categories[0]}">` +
+                `<span class="result-name">${m.display}</span> ${cats}` +
+                (m.note ? `<div class="small text-muted">${m.note}</div>` : '') +
+                `</li>`;
+        }).join('');
+        results.hidden = false;
     });
 
-
-
-    /*** For each antibiotic listed in the ANTIBIOTICS object ***/
-    Object.keys(ANTIBIOTICS).forEach(function(abx) {
-        var antibiotic = ANTIBIOTICS[abx];
-
-        // Generate the HTML for the list, and add it to the page
-        var html = '<li id="' + abx + '">' + antibiotic.name + '</li>';
-        $( '#' + antibiotic.abxClass + ' ul').append(html);
-        $( '#' + abx).addClass( "antibiotics" );
-        $( '#' + abx).addClass( "toggleable" );
-        $( '#' + abx).addClass( "list-group-item" );
-
-        // When you hover over the **antibiotic**...
-        $( '#'+abx).on( "mouseenter", function(){
-            addHighlights(csvToJS(CSV_ANTIBIOTICS, false)[abx]), // highlight the **bugs**
-            addInfoBox(antibiotic.fullName, antibiotic.comments, antibiotic.examples)
-        } );
-        $( '#'+abx).on( "mouseleave", function(){clearHighlights()} );
+    results.addEventListener('click', e => {
+        const li = e.target.closest('.bug-result');
+        if (!li) return;
+        const cats = li.dataset.cats.split(',');
+        hideResults();
+        stuck = { type: 'bug', id: li.dataset.primary };
+        updateToolbar();
+        renderBase();
+        cats.forEach(c => {
+            const el = document.getElementById(c);
+            if (el) { el.classList.add('pulse'); setTimeout(() => el.classList.remove('pulse'), 1600); }
+        });
+        const table = document.getElementById('bug-table');
+        if (table.scrollIntoView) table.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     });
 
+    // Hide the dropdown when focus leaves the search area
+    search.addEventListener('blur', () => setTimeout(hideResults, 200));
+    search.addEventListener('focus', () => { if (results.innerHTML.trim()) results.hidden = false; });
+}
 
-
-    /*** For each bug listed in the BACTERIA object ***/
-    Object.keys(BACTERIA).forEach(function(bug) {
-        var bacteria = BACTERIA[bug];
-        $( '#' + bug).addClass( "bugs" );
-        $( '#' + bug).addClass( "toggleable" );
-
-        // When you hover over the **bug**... 
-        $( '#'+bug + ", #"+bug+"-txt").on( "mouseenter", function(){
-            addHighlights(csvToJS(CSV_SYNDROME, true)[bug]),    // highlight the **syndromes**
-            addHighlights(csvToJS(CSV_ANTIBIOTICS, true)[bug]), // highlight the **antibiotics**
-            // Add info box
-            addInfoBox(bacteria.name, bacteria.comments, bacteria.bugExamples)
-
-            /** Note: The jQuery code also adds an additional selector, 
-             * e.g. $(#GNR, #GNR-text) so the function is applied when you hover
-             * over the SVG text (in addition to the box)
-             **/ 
-        } );
-        $( '#'+bug).on( "mouseleave", function(){clearHighlights()} );
-    });
-
-    /*
-    //console.log(BACTERIA);
-    console.log(  csvToJS(CSV_SYNDROME, false)  ); // When you hover over the **syndrome**, highlight the **bug**
-    console.log(  csvToJS(CSV_SYNDROME, true)  );  // When you hover over the **bug**, highlight the **syndrome**
-
-    console.log(  csvToJS(CSV_ANTIBIOTICS, false)  ); // When you hover over the **antibiotic**, highlight the **bug**
-    console.log(  csvToJS(CSV_ANTIBIOTICS, true)  );  // When you hover over the **bug**, highlight the **antibiotic**
-
-    console.log(csvToJS(CSV_ANTIBIOTICS, true)["AmpC"]);
-    */
-    
+/******************************************************************************\
+ * SECTION VI — Init
+ \*****************************************************************************/
+document.addEventListener('DOMContentLoaded', () => {
+    buildAntibiotics();
+    buildSyndromes();
+    buildBugs();
+    setupAntibioticFilter();
+    setupBugSearch();
+    document.getElementById('clear-selection').addEventListener('click', clearAll);
+    updateToolbar();
+    renderBase();
 });
-
