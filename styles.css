@@ -22,7 +22,7 @@
     --header-bg: linear-gradient(135deg, #16324f 0%, #1f78b4 100%);
     --surface: #ffffff;
     --bg: #f4f6f9;
-    --radius: 12px;
+    --radius: 8px;
     --shadow: 0 1px 3px rgba(0,0,0,.08), 0 4px 12px rgba(0,0,0,.05);
 }
 
@@ -67,6 +67,21 @@ body {
 .syndromes-chip { background: rgba(var(--c-blue), .2); }
 .bug-chip       { background: rgba(231, 41, 138, .15); }
 .abx-chip       { background: rgba(var(--c-good), .2); }
+
+/* ----------------------------- App tabs --------------------------- */
+.app-tabs {
+    background: var(--surface);
+    border-radius: var(--radius) var(--radius) 0 0;
+    box-shadow: var(--shadow);
+    padding: .35rem .35rem 0;
+}
+.app-tabs .nav-link {
+    color: #334155;
+    font-weight: 650;
+}
+.app-tabs .nav-link.active {
+    color: #0f5d8f;
+}
 
 /* --------------------- Column heads / search ---------------------- */
 .column-head {
@@ -171,6 +186,192 @@ body {
 .cover-partial { color: #b36b00; }
 
 /* ===========================================================================
+   Review tabs
+   =========================================================================== */
+.review-tool {
+    background: var(--surface);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 1rem;
+}
+.review-head {
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+    gap: 1rem;
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: .75rem;
+    margin-bottom: .75rem;
+}
+.review-head h2 {
+    font-size: 1.35rem;
+    font-weight: 750;
+    margin: 0 0 .2rem;
+}
+.review-head p {
+    color: #52616f;
+    margin: 0;
+}
+.review-updated {
+    white-space: nowrap;
+    font-size: .75rem;
+    font-weight: 650;
+    color: #475569;
+    background: #e2e8f0;
+    border-radius: 999px;
+    padding: .25rem .55rem;
+}
+.review-controls {
+    display: grid;
+    grid-template-columns: minmax(220px, 1fr) minmax(180px, 260px);
+    gap: .5rem;
+    margin-bottom: .75rem;
+}
+.review-callouts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: .55rem;
+    margin-bottom: .75rem;
+}
+.review-callout {
+    background: #f8fafc;
+    border: 1px solid #dbe4ee;
+    border-left: 4px solid #1f78b4;
+    border-radius: var(--radius);
+    padding: .65rem .75rem;
+}
+.review-callout h3 {
+    font-size: .85rem;
+    font-weight: 750;
+    margin: 0 0 .25rem;
+    color: #16324f;
+}
+.review-callout p {
+    font-size: .8rem;
+    line-height: 1.35;
+    margin: 0;
+    color: #334155;
+}
+.review-table-wrap {
+    border: 1px solid #e2e8f0;
+    border-radius: var(--radius);
+    overflow: auto;
+}
+.review-table {
+    min-width: 980px;
+    margin: 0;
+}
+.review-table thead th {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background: #1f2933;
+    color: #fff;
+    border-bottom: 0;
+    font-size: .72rem;
+    line-height: 1.15;
+    text-align: center;
+    vertical-align: middle;
+}
+.review-table tbody th,
+.review-table tbody td {
+    border-color: #e2e8f0;
+}
+.review-agent-col {
+    width: 210px;
+}
+.review-note-col {
+    width: 310px;
+}
+.review-group-row th {
+    background: #eef2f7;
+    color: #1f2933;
+    font-size: .82rem;
+    letter-spacing: 0;
+    text-transform: uppercase;
+}
+.review-agent-name {
+    display: block;
+    font-weight: 750;
+    line-height: 1.15;
+}
+.review-agent-examples {
+    display: block;
+    color: #64748b;
+    font-size: .75rem;
+    font-weight: 500;
+    line-height: 1.2;
+    margin-top: .15rem;
+}
+.review-cell {
+    min-width: 72px;
+    text-align: center;
+    font-size: .7rem;
+    font-weight: 750;
+    color: #111827;
+}
+.review-cell span,
+.review-legend .review-cell {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 58px;
+    min-height: 26px;
+    border-radius: 4px;
+    padding: .2rem .35rem;
+}
+.review-good span,
+.review-legend .review-good {
+    background: rgba(var(--c-good), .85);
+    color: #fff;
+}
+.review-broad span,
+.review-legend .review-broad {
+    background: rgba(var(--c-good), .36);
+}
+.review-some span,
+.review-legend .review-some {
+    background: rgba(var(--c-orange), .42);
+}
+.review-note span,
+.review-legend .review-note {
+    background: rgba(var(--c-yellow), .8);
+}
+.review-bad span,
+.review-na span,
+.review-legend .review-bad {
+    background: rgba(var(--c-grey), .18);
+    color: #52616f;
+}
+.review-note-text {
+    color: #334155;
+    font-size: .82rem;
+    line-height: 1.35;
+}
+.review-footer {
+    margin-top: .85rem;
+}
+.review-footer h3 {
+    font-size: .95rem;
+    font-weight: 750;
+    margin-bottom: .35rem;
+}
+.review-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .35rem;
+    margin-bottom: .5rem;
+}
+.review-sources {
+    margin: 0;
+    padding-left: 1.1rem;
+    font-size: .82rem;
+}
+.review-sources li {
+    margin-bottom: .15rem;
+}
+
+/* ===========================================================================
    SVG bug table
    =========================================================================== */
 #bug-table { display: block; }
@@ -239,4 +440,17 @@ rect.pulse { animation: bug-pulse 1.6s ease-out; stroke: #ffd400; }
 @media (max-width: 991.98px) {
     .column-head { position: static; }
     .app-header { position: static; }
+}
+
+@media (max-width: 575.98px) {
+    .review-head,
+    .review-controls {
+        grid-template-columns: 1fr;
+    }
+    .review-head {
+        display: grid;
+    }
+    .review-updated {
+        justify-self: start;
+    }
 }

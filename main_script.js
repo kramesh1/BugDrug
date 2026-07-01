@@ -38,6 +38,14 @@ const HILITE_CLASSES = ['good', 'broad', 'some', 'bad', 'na', 'com', 'occ', 'not
 
 // Rank used to pick the "best" coverage across multiple selected antibiotics.
 const COVERAGE_RANK = { good: 5, broad: 4, some: 3, note: 2, bad: 1, na: 0 };
+const REVIEW_CLASS_LABELS = {
+    good: 'Good',
+    broad: 'Broad',
+    some: 'Limited',
+    note: 'Note',
+    bad: 'No',
+    na: 'No'
+};
 
 const pinned = new Set(); // ids of pinned (selected) antibiotics
 let stuck = null;         // {type:'bug'|'syndrome', id} pinned via tap (touch support)
@@ -130,6 +138,20 @@ function applyHighlights(map, defaultClass = 'na') {
         if (!el) return;
         el.classList.add(map[id] || defaultClass);
     });
+}
+
+function stripHTML(str) {
+    const div = document.createElement('div');
+    div.innerHTML = str || '';
+    return div.textContent || div.innerText || '';
+}
+
+function reviewCellClass(cls) {
+    return `review-cell review-${cls || 'na'}`;
+}
+
+function reviewCellLabel(cls) {
+    return REVIEW_CLASS_LABELS[cls || 'na'] || '';
 }
 
 /******************************************************************************\
@@ -388,6 +410,138 @@ function setupBugSearch() {
     search.addEventListener('focus', () => { if (results.innerHTML.trim()) results.hidden = false; });
 }
 
+function buildReviewTool(toolId, paneId) {
+    const tool = COVERAGE_REVIEW_TOOLS[toolId];
+    const pane = document.getElementById(paneId);
+    if (!tool || !pane) return;
+
+    const safeId = `review-${toolId}`;
+    const groupOptions = tool.groups
+        .map((group, i) => `<option value="${i}">${group.name}</option>`)
+        .join('');
+    const rows = [];
+
+    tool.groups.forEach((group, groupIndex) => {
+        rows.push(
+            `<tr class="review-group-row" data-group="${groupIndex}">` +
+            `<th colspan="${tool.columns.length + 2}">${group.name}</th>` +
+            `</tr>`
+        );
+        group.agents.forEach(agent => {
+            const searchText = [
+                agent.name,
+                agent.examples || '',
+                agent.note || '',
+                group.name,
+                ...Object.keys(agent.coverage || {})
+            ].join(' ');
+            const cells = tool.columns.map(col => {
+                const cls = (agent.coverage || {})[col.id] || 'na';
+                return `<td class="${reviewCellClass(cls)}" title="${col.hint || col.label}: ${reviewCellLabel(cls)}">` +
+                    `<span>${reviewCellLabel(cls)}</span>` +
+                    `</td>`;
+            }).join('');
+            rows.push(
+                `<tr class="review-agent-row" data-group="${groupIndex}" data-search="${stripHTML(searchText).toLowerCase()}">` +
+                `<th scope="row"><span class="review-agent-name">${agent.name}</span>` +
+                (agent.examples ? `<span class="review-agent-examples">${agent.examples}</span>` : '') +
+                `</th>` +
+                cells +
+                `<td class="review-note-text">${agent.note || ''}</td>` +
+                `</tr>`
+            );
+        });
+    });
+
+    const sources = tool.sources.map(source =>
+        `<li><a href="${source.url}" target="_blank" rel="noopener">${source.label}</a></li>`
+    ).join('');
+    const callouts = (tool.callouts || []).map(callout =>
+        `<article class="review-callout">` +
+        `<h3>${callout.title}</h3>` +
+        `<p>${callout.text}</p>` +
+        `</article>`
+    ).join('');
+
+    pane.innerHTML =
+        `<section class="review-tool" aria-labelledby="${safeId}-title">` +
+        `<div class="review-head">` +
+        `<div>` +
+        `<h2 id="${safeId}-title">${tool.title}</h2>` +
+        `<p>${tool.subtitle}</p>` +
+        `</div>` +
+        `<span class="review-updated">Updated ${tool.updated}</span>` +
+        `</div>` +
+        (callouts ? `<div class="review-callouts">${callouts}</div>` : '') +
+        `<div class="review-controls">` +
+        `<input type="search" class="form-control form-control-sm" id="${safeId}-search" placeholder="Search agents, organisms, uses, notes..." autocomplete="off" aria-label="Search ${tool.title}">` +
+        `<select class="form-select form-select-sm" id="${safeId}-group" aria-label="Filter ${tool.title} groups">` +
+        `<option value="">All groups</option>${groupOptions}` +
+        `</select>` +
+        `</div>` +
+        `<div class="review-table-wrap">` +
+        `<table class="table table-sm review-table align-middle">` +
+        `<thead><tr>` +
+        `<th scope="col" class="review-agent-col">${tool.rowHeader || 'Agent'}</th>` +
+        tool.columns.map(col => `<th scope="col" title="${col.hint || ''}">${col.label}</th>`).join('') +
+        `<th scope="col" class="review-note-col">Conceptual notes</th>` +
+        `</tr></thead>` +
+        `<tbody>${rows.join('')}</tbody>` +
+        `</table>` +
+        `</div>` +
+        `<div class="row g-3 review-footer">` +
+        `<div class="col-12 col-lg-7">` +
+        `<div class="review-legend">` +
+        `<span class="review-cell review-good">Good</span>` +
+        `<span class="review-cell review-broad">Broad</span>` +
+        `<span class="review-cell review-some">Limited</span>` +
+        `<span class="review-cell review-note">Note</span>` +
+        `<span class="review-cell review-bad">No</span>` +
+        `</div>` +
+        `<p class="small text-muted mb-0">This is a broad educational coverage review. It does not replace organism-level susceptibility, resistance history, immune status, pregnancy considerations, drug interaction review, or local guidance.</p>` +
+        `</div>` +
+        `<div class="col-12 col-lg-5">` +
+        `<h3>Sources</h3>` +
+        `<ul class="review-sources">${sources}</ul>` +
+        `</div>` +
+        `</div>` +
+        `</section>`;
+
+    const search = document.getElementById(`${safeId}-search`);
+    const group = document.getElementById(`${safeId}-group`);
+    const agentRows = [...pane.querySelectorAll('.review-agent-row')];
+    const groupRows = [...pane.querySelectorAll('.review-group-row')];
+
+    function applyReviewFilters() {
+        const q = search.value.trim().toLowerCase();
+        const qTokens = q.split(/\s+/).filter(Boolean);
+        const selectedGroup = group.value;
+        const visibleGroups = new Set();
+
+        agentRows.forEach(row => {
+            const matchesGroup = !selectedGroup || row.dataset.group === selectedGroup;
+            const matchesSearch = qTokens.length === 0 || qTokens.every(token => row.dataset.search.includes(token));
+            const visible = matchesGroup && matchesSearch;
+            row.hidden = !visible;
+            if (visible) visibleGroups.add(row.dataset.group);
+        });
+
+        groupRows.forEach(row => {
+            row.hidden = !visibleGroups.has(row.dataset.group);
+        });
+    }
+
+    search.addEventListener('input', applyReviewFilters);
+    group.addEventListener('change', applyReviewFilters);
+}
+
+function buildReviewTools() {
+    buildReviewTool('hiv', 'hiv-pane');
+    buildReviewTool('viral', 'viral-pane');
+    buildReviewTool('fungal', 'fungal-pane');
+    buildReviewTool('transplant', 'transplant-pane');
+}
+
 /******************************************************************************\
  * SECTION VI — Init
  \*****************************************************************************/
@@ -397,6 +551,7 @@ document.addEventListener('DOMContentLoaded', () => {
     buildBugs();
     setupAntibioticFilter();
     setupBugSearch();
+    buildReviewTools();
     document.getElementById('clear-selection').addEventListener('click', clearAll);
     updateToolbar();
     renderBase();
