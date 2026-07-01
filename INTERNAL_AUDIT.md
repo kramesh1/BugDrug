@@ -73,6 +73,17 @@ The tool remains educational only. It should not be used as a patient-care decis
 - Examples include gram-positive cocci in clusters, gram-positive cocci in pairs/chains, gram-negative diplococci, lactose-fermenting and lactose-negative gram-negative rods, coccobacilli, curved rods, gram-positive rods, branching rods, and yeast/fungal forms.
 - This is a teaching differential only. Culture, rapid ID, susceptibility testing, specimen source, and clinical context remain required.
 
+## Bacterial Grid Corrections (2026-07-01 review)
+
+A second clinical accuracy pass found residual errors in the pre-existing bacterial grid and notes (inherited from the upstream fork). Corrected:
+
+- Babesiosis was listed as a doxycycline/tick-borne target in the `DOX` and `Zoo` notes. Removed: *Babesia* is an intra-erythrocytic protozoan treated with atovaquone+azithromycin or clindamycin+quinine, not doxycycline.
+- Atypical-pneumonia note claimed "most of these bacteria lack cell walls." Reworded: only *Mycoplasma* truly lacks a cell wall; *Legionella* and *Chlamydia* have cell walls but stain/culture poorly.
+- Cefazolin note listed *Moraxella* under its gram-negative coverage. Removed: most *M. catarrhalis* produce BRO beta-lactamase and resist first-generation cephalosporins.
+- Grid grade fixes (synced in `files/CSV_data/antibiotics.csv` and `files/parseCSV.js`): ampicillin MSSA `some`→`bad` (staphylococcal penicillinase), ampicillin VSE `some`→`good` (drug of choice for *E. faecalis*), ceftriaxone Strep `some`→`good` (first-line for *S. pneumoniae*), cefepime AmpC `some`→`good` (aligns the grid with the AmpC and cefepime notes recommending cefepime).
+
+Deferred as defensible judgment calls: meropenem `DTR=some`, syndrome-grid `com/occ` nuances, and the shared `MSSA=some` label across ampicillin-sulbactam / amoxicillin-clavulanate / piperacillin-tazobactam.
+
 ## Source Categories Checked
 
 - 2019 ATS/IDSA CAP guideline: https://www.idsociety.org/practice-guideline/community-acquired-pneumonia-cap-in-adults/

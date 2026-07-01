@@ -177,7 +177,7 @@ const ANTIBIOTICS = {
         },
         abxClass: 'cephalosporins',
         comments: '<b>Drug of choice</b> for methicillin <b class="text-success">susceptible</b> staphylococcus. ' +
-        "Has very limited gram negative coverage (<i>E coli, Klebsiella, Proteus mirabilis, Moraxella</i>), and only " +
+        "Has very limited gram negative coverage (<i>E coli, Klebsiella, Proteus mirabilis</i>), and only " +
         "when there is not resistance."
     },
     'FOX': {
@@ -309,7 +309,7 @@ const ANTIBIOTICS = {
         examples: {Doxycycline: {route: "IV/PO"}},
         abxClass: 'tetracyclines',
         comments: "Doxycycline has broad applications: It's used to treat <b>zoonotic</b> (Leptospirosis, Brucella, " +
-        "Q fever, Bartonella) and <b>tick-borne</b> (Rickettsia, Lyme, Babesiosis, Anaplasmosis/Ehrlichiosis) diseases, " +
+        "Q fever, Bartonella) and <b>tick-borne</b> (Rickettsia, Lyme, Anaplasmosis/Ehrlichiosis) diseases, " +
         'as well as the <b>"atypical" pneumonias</b> (Mycoplasma, Legionella, Chlamydia). Doxy also has activity against ' +
         "Staph spp., including MRSA (though there can be resistance).<br><br>" +
         "Tetracyclines (like doxy) are also nice because they don't need to be renally dosed. However, while they achieve " +
@@ -867,14 +867,15 @@ const BACTERIA = {
         bugExamples: 'Mycoplasma pneumoniae, Legionella pneumophila, Chlamydia pneumoniae, Chlamydia psittaci',
         bugClass: 'atyp',
         comments: `Atypical pneumonias are called "atypical" because they do not grow well with traditional methods.
-        This is in part because most of these bacteria lack cell walls. <i>C pneumoniae</i> often develops in younger
+        This is in part because they stain poorly or grow intracellularly; <i>Mycoplasma</i> in particular lacks a cell
+        wall, while <i>Legionella</i> and <i>Chlamydia</i> have cell walls but are hard to culture or Gram stain. <i>C pneumoniae</i> often develops in younger
         children, whereas <i>C psittaci</i> is more associated with pet birds. <i>Mycoplasma</i> is the classic "walking
         pneumonia" and is generally less severe than <i>Legionella</i>.`
     },
     'Zoo': {
         name: 'Zoonotic & tick-borne bacteria',
         bugExamples: "<u>Zoonotic:</u> Leptospirosis, Brucella, Q fever, Bartonella, Yersinia pestis<br> " +
-        "<u>Tick-borne:</u> Rickettsia, Lyme, Babesiosis, Anaplasmosis/Ehrlichiosis, Tularemia",
+        "<u>Tick-borne:</u> Rickettsia, Lyme, Anaplasmosis/Ehrlichiosis, Tularemia",
         bugClass: 'atyp',
         comments: `This is such a broad category and it's beyond the scope of this page to talk about all of the
         zoonotic & tick-borne pathogens (and their treatments). The important takeaway for learners is that

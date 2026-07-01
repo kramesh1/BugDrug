@@ -555,7 +555,6 @@ function buildReviewTool(toolId, paneId) {
         `<div class="col-12 col-lg-7">` +
         `<div class="review-legend">` +
         `<span class="review-cell review-good">Good</span>` +
-        `<span class="review-cell review-broad">Broad</span>` +
         `<span class="review-cell review-some">Limited</span>` +
         `<span class="review-cell review-note">Note</span>` +
         `<span class="review-cell review-bad">No</span>` +
