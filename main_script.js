@@ -3,7 +3,8 @@
  *
  * DEPENDENCIES (loaded before this file in index.html):
  *   1. parseCSV.js       -> csvToJS(), CSV_SYNDROME, CSV_ANTIBIOTICS
- *   2. static_objects.js -> ANTIBIOTICS, BACTERIA, SYNDROMES
+ *   2. static_objects.js -> ANTIBIOTICS, BACTERIA, SYNDROMES,
+ *                           COVERAGE_REVIEW_TOOLS, GRAM_STAIN_LOOKUP
  *   3. species_index.js  -> SPECIES_INDEX (species -> category lookup)
  *
  * FEATURES
@@ -410,6 +411,67 @@ function setupBugSearch() {
     search.addEventListener('focus', () => { if (results.innerHTML.trim()) results.hidden = false; });
 }
 
+function normalizeGramQuery(str) {
+    return (str || '')
+        .toLowerCase()
+        .replace(/gram[\s-]*/g, '')
+        .replace(/non[\s-]?lactose/g, 'nonlactose')
+        .replace(/lactose[\s-]?negative/g, 'nonlactose negative')
+        .replace(/lactose[\s-]?positive/g, 'lactose positive')
+        .replace(/gnr/g, 'negative rod')
+        .replace(/gpc/g, 'positive cocci')
+        .replace(/gpr/g, 'positive rod')
+        .replace(/[^a-z0-9]+/g, ' ')
+        .trim();
+}
+
+function setupGramStainLookup() {
+    const input = document.getElementById('gram-stain-input');
+    const results = document.getElementById('gram-stain-results');
+    if (!input || !results) return;
+
+    function render() {
+        const normalized = normalizeGramQuery(input.value);
+        const tokens = normalized.split(/\s+/).filter(Boolean);
+        if (!tokens.length) {
+            results.hidden = true;
+            results.innerHTML = '';
+            return;
+        }
+
+        const wantsNonLactose = tokens.includes('nonlactose');
+        const wantsLactosePositive = tokens.includes('lactose') && tokens.includes('positive');
+        const matches = GRAM_STAIN_LOOKUP.map(item => {
+            const tagText = item.tags.join(' ');
+            const score = tokens.reduce((sum, token) => sum + (tagText.includes(token) ? 1 : 0), 0);
+            return {...item, score};
+        })
+            .filter(item => item.score > 0)
+            .filter(item => !wantsNonLactose || item.tags.includes('nonlactose'))
+            .filter(item => !wantsLactosePositive || (item.tags.includes('lactose') && !item.tags.includes('nonlactose')))
+            .sort((a, b) => b.score - a.score || a.title.localeCompare(b.title))
+            .slice(0, 4);
+
+        if (!matches.length) {
+            results.innerHTML = '<div class="gram-empty">No teaching match. Try terms like cocci, clusters, rods, lactose negative, or diplococci.</div>';
+            results.hidden = false;
+            return;
+        }
+
+        results.innerHTML = matches.map(item =>
+            `<article class="gram-result">` +
+            `<h4>${item.title}</h4>` +
+            `<p class="gram-examples">${item.examples.join(' / ')}</p>` +
+            `<p>${item.note}</p>` +
+            `</article>`
+        ).join('') +
+            '<p class="gram-disclaimer">Early stain patterns are clues, not IDs. Use specimen source, culture, rapid ID, and susceptibility results.</p>';
+        results.hidden = false;
+    }
+
+    input.addEventListener('input', render);
+}
+
 function buildReviewTool(toolId, paneId) {
     const tool = COVERAGE_REVIEW_TOOLS[toolId];
     const pane = document.getElementById(paneId);
@@ -538,6 +600,7 @@ function buildReviewTool(toolId, paneId) {
 function buildReviewTools() {
     buildReviewTool('hiv', 'hiv-pane');
     buildReviewTool('viral', 'viral-pane');
+    buildReviewTool('hcv', 'hcv-pane');
     buildReviewTool('fungal', 'fungal-pane');
     buildReviewTool('transplant', 'transplant-pane');
 }
@@ -551,6 +614,7 @@ document.addEventListener('DOMContentLoaded', () => {
     buildBugs();
     setupAntibioticFilter();
     setupBugSearch();
+    setupGramStainLookup();
     buildReviewTools();
     document.getElementById('clear-selection').addEventListener('click', clearAll);
     updateToolbar();

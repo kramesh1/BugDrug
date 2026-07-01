@@ -1,16 +1,17 @@
 # Internal Audit: BugDrug Page
 
-Date: 2026-06-30
+Date: 2026-07-01
 
 Scope: root `index.html` app, antibacterial grid behavior, review-tab renderer, static clinical data objects, source links, route/filter behavior, organism search mappings, and learner-facing infectious disease notes.
 
 ## App Scope
 
-BugDrug is now a conceptual antimicrobial review page with five main tabs:
+BugDrug is now a conceptual antimicrobial review page with six main tabs:
 
 - Bacterial coverage and syndrome review.
-- HIV treatment and prophylaxis review.
-- Other viral coverage, including HCV.
+- HIV essentials.
+- Other viral coverage.
+- Hepatitis C.
 - Fungal coverage.
 - Solid organ transplant infection prevention by transplant type.
 
@@ -27,25 +28,32 @@ The tool remains educational only. It should not be used as a patient-care decis
 
 ## Expansion Added
 
-- Added top-level Bootstrap tabs for `Bacterial`, `HIV`, `Other Viral`, `Fungal`, and `Transplant`.
+- Added top-level Bootstrap tabs for `Bacterial`, `HIV`, `Other Viral`, `Hep C`, `Fungal`, and `Transplant`.
 - Added a reusable review-tab renderer driven by `COVERAGE_REVIEW_TOOLS` in `files/static_objects.js`.
 - Added review callouts for threshold-heavy topics, including HIV OI prophylaxis, HCV simplified treatment caveats, and transplant infectious-risk framing.
 - Added tokenized multi-term search for review tabs, so queries such as `lung mold` match rows containing both terms.
 - Added responsive table containers so wide review matrices scroll internally rather than forcing whole-page overflow on mobile.
+- Added a compact gram-stain lookup helper driven by `GRAM_STAIN_LOOKUP`.
+- Simplified HIV and transplant tabs to reduce row and column density.
+- Moved HCV content from `Other Viral` into a dedicated `Hep C` tab.
 - Updated metadata, README, and source documentation to match the expanded antimicrobial scope.
 
 ## New Clinical Review Areas
 
 ### HIV
 
-- ART, PrEP, PEP, and selected OI prophylaxis are summarized at a conceptual level.
-- PCP, Toxoplasma, MAC, TB/LTBI, and selected endemic fungal prophylaxis thresholds are represented as teaching callouts and broad coverage rows.
+- ART, PrEP, PEP, and selected OI prophylaxis are summarized in a compact essentials table.
+- PCP, Toxoplasma, and MAC thresholds are represented as high-yield teaching callouts.
 - Prophylaxis thresholds were checked against NIH ClinicalInfo adult/adolescent OI guidance current to the May 27, 2026 update.
 
-### Other Viral and HCV
+### Other Viral
 
-- Influenza, COVID-19, HSV/VZV, CMV, HBV, and HCV coverage concepts are summarized.
-- HCV rows distinguish simplified noncirrhotic treatment, compensated cirrhosis, decompensated cirrhosis, retreatment, HIV/HCV coinfection, and HBV reactivation screening.
+- Influenza, COVID-19, HSV/VZV, CMV, and HBV coverage concepts are summarized.
+
+### Hepatitis C
+
+- HCV has a dedicated tab.
+- Rows distinguish simplified noncirrhotic treatment, compensated cirrhosis, decompensated cirrhosis, retreatment, HIV/HCV coinfection, and HBV reactivation screening.
 - HCV simplified treatment concepts were checked against AASLD/IDSA HCV Guidance pages last updated December 19, 2023.
 
 ### Fungal
@@ -55,9 +63,15 @@ The tool remains educational only. It should not be used as a patient-care decis
 
 ### Transplant
 
-- Added a solid organ transplant prevention tab comparing heart, kidney, liver, and lung.
-- Topics include CMV, HSV/VZV, PCP, Toxoplasma, Candida, mold prophylaxis, HBV/HCV donor-recipient planning, vaccines, induction/maintenance immunosuppression, drug levels, CMV/BK/EBV monitoring, PHS donor-derived virus NAT, epidemiology-driven screening, and rejection-therapy reassessment.
+- Added a simplified solid organ transplant prevention tab comparing heart, kidney, liver, and lung.
+- Topics include CMV, PCP, Toxoplasma/donor serology, fungal prophylaxis, vaccines/exposures, induction intensity, CNI backbone, antimetabolite/steroids, CNI-sparing agents, CMV PCR, BK PCR, donor-derived virus testing, and rejection/interaction checks.
 - Transplant data intentionally highlights center-dependent areas rather than presenting universal protocols.
+
+### Gram-Stain Lookup
+
+- Added a bacterial-tab helper for early gram-stain descriptors.
+- Examples include gram-positive cocci in clusters, gram-positive cocci in pairs/chains, gram-negative diplococci, lactose-fermenting and lactose-negative gram-negative rods, coccobacilli, curved rods, gram-positive rods, branching rods, and yeast/fungal forms.
+- This is a teaching differential only. Culture, rapid ID, susceptibility testing, specimen source, and clinical context remain required.
 
 ## Source Categories Checked
 

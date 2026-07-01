@@ -1017,161 +1017,98 @@ const SYNDROMES = {
  \*****************************************************************************/
 const COVERAGE_REVIEW_TOOLS = {
     hiv: {
-        title: 'HIV treatment and prophylaxis',
-        subtitle: 'Broad roles for ART, PrEP, PEP, and selected HIV-related prophylaxis.',
-        updated: '2026-06-30',
+        title: 'HIV essentials',
+        subtitle: 'A compact review of treatment, prevention, and the prophylaxis thresholds learners should recognize.',
+        updated: '2026-07-01',
         columns: [
-            {id: 'initialART', label: 'Initial ART', hint: 'Common first-line treatment role'},
-            {id: 'maintenanceART', label: 'Maintenance ART', hint: 'Switch/simplification after suppression'},
-            {id: 'prepSex', label: 'PrEP: sex', hint: 'Pre-exposure prevention for sexual transmission'},
-            {id: 'prepInjection', label: 'PrEP: injection', hint: 'Pre-exposure prevention for injection-drug exposure'},
-            {id: 'pep', label: 'PEP', hint: 'Post-exposure prevention'},
+            {id: 'treatment', label: 'Treatment', hint: 'Role in ART for established HIV'},
+            {id: 'prep', label: 'PrEP', hint: 'Pre-exposure prophylaxis'},
+            {id: 'pep', label: 'PEP', hint: 'Post-exposure prophylaxis'},
             {id: 'hbv', label: 'HBV active', hint: 'Also active against hepatitis B'},
-            {id: 'pcpPrimary', label: 'PCP primary', hint: 'Primary Pneumocystis prophylaxis'},
-            {id: 'toxoPrimary', label: 'Toxo primary', hint: 'Primary Toxoplasma prophylaxis'},
-            {id: 'macPrimary', label: 'MAC primary', hint: 'Primary MAC prophylaxis'},
-            {id: 'endemicFungal', label: 'Endemic fungal', hint: 'Selected geographic/exposure fungal prophylaxis'},
-            {id: 'tbLtbi', label: 'TB/LTBI', hint: 'Latent TB infection prevention/treatment'}
+            {id: 'oi', label: 'OI prevention', hint: 'Opportunistic infection prophylaxis role'}
         ],
         callouts: [
             {
-                title: 'PCP prophylaxis',
-                text: 'Start if not on ART or starting ART with CD4 <200; on ART, start/restart if CD4 <100 regardless of HIV RNA, or CD4 100-200 with detectable HIV RNA. TMP-SMX is preferred and also helps cover Toxoplasma.'
+                title: 'ART big picture',
+                text: 'Most initial ART is an INSTI-based complete regimen. Always check HIV RNA, resistance context, HBV status, pregnancy potential, interactions, and renal function.'
             },
             {
-                title: 'Toxoplasma prophylaxis',
-                text: 'Use primary prophylaxis for Toxoplasma IgG-positive patients with CD4 <100. TMP-SMX DS daily is preferred; all recommended Toxo prophylaxis regimens also cover PCP.'
+                title: 'PrEP and PEP',
+                text: 'PrEP is prevention before exposure. PEP is urgent prevention after exposure and should start as soon as possible, using a full three-drug course when indicated.'
             },
             {
-                title: 'MAC prophylaxis',
-                text: 'Consider only when CD4 <50 and the patient is not receiving ART, remains viremic on ART, or has no fully suppressive ART option. NIH states it is not recommended when ART is started immediately after HIV diagnosis.'
-            },
-            {
-                title: 'Geographic/exposure prophylaxis',
-                text: 'Selected fungal prophylaxis is context-specific: coccidioidomycosis with new positive serology and CD4 <250; histoplasmosis with CD4 <150 plus high-risk hyperendemic exposure; talaromycosis with CD4 <100 in hyperendemic regions or relevant travel.'
+                title: 'OI thresholds',
+                text: 'PCP: usually CD4 <200. Toxoplasma: IgG-positive and CD4 <100. MAC: selected CD4 <50 scenarios when ART is not promptly suppressive.'
             }
         ],
         groups: [
             {
-                name: 'Treatment backbones and anchors',
+                name: 'Treatment and prevention',
                 agents: [
                     {
-                        name: 'BIC/FTC/TAF',
-                        examples: 'Bictegravir/emtricitabine/tenofovir alafenamide',
-                        coverage: {initialART: 'good', maintenanceART: 'good', hbv: 'good'},
-                        note: 'Single-tablet INSTI-based regimen with a high barrier to resistance. Avoid using the FTC/TAF backbone alone for HIV because complete ART needs a third active anchor.'
+                        name: 'INSTI-based ART',
+                        examples: 'BIC/FTC/TAF; DTG plus TAF/TDF + FTC/3TC',
+                        coverage: {treatment: 'good', hbv: 'good'},
+                        note: 'Common first-line pattern. Tenofovir plus FTC or 3TC adds HBV activity, which matters in HIV/HBV coinfection.'
                     },
                     {
-                        name: 'DTG + TAF/TDF + FTC/3TC',
-                        examples: 'Dolutegravir plus two NRTIs',
-                        coverage: {initialART: 'good', maintenanceART: 'good', hbv: 'good'},
-                        note: 'Common INSTI-based approach when a separate anchor plus NRTI backbone is preferred. Tenofovir plus FTC or 3TC also provides HBV activity.'
+                        name: 'Two-drug maintenance ART',
+                        examples: 'DTG/3TC; long-acting CAB/RPV',
+                        coverage: {treatment: 'some'},
+                        note: 'Useful only in selected patients. Avoid simplification that drops HBV-active therapy when HBV treatment is needed.'
                     },
                     {
-                        name: 'DTG/3TC',
-                        examples: 'Dolutegravir/lamivudine',
-                        coverage: {initialART: 'some', maintenanceART: 'good', hbv: 'some'},
-                        note: 'Two-drug complete regimen for selected patients. It is not the right simplification when HBV treatment is needed unless HBV-active therapy is added.'
+                        name: 'Boosted PI strategy',
+                        examples: 'Darunavir/ritonavir or darunavir/cobicistat based',
+                        coverage: {treatment: 'some'},
+                        note: 'High resistance barrier, but boosting creates many drug interactions. Often a specialist-guided strategy.'
                     },
                     {
-                        name: 'Boosted darunavir regimens',
-                        examples: 'DRV/r or DRV/c plus an NRTI backbone',
-                        coverage: {initialART: 'some', maintenanceART: 'some'},
-                        note: 'Useful when resistance, adherence uncertainty, or a high-barrier protease inhibitor strategy matters. Ritonavir/cobicistat boosting creates substantial interaction issues.'
+                        name: 'Oral PrEP',
+                        examples: 'F/TDF; F/TAF for selected sexual exposures',
+                        coverage: {prep: 'good', hbv: 'good'},
+                        note: 'F/TDF is the broad oral PrEP workhorse. F/TAF is not used for receptive vaginal exposure and is not the injection-drug PrEP standard.'
                     },
                     {
-                        name: 'CAB/RPV long-acting',
-                        examples: 'Cabotegravir/rilpivirine IM',
-                        coverage: {maintenanceART: 'good'},
-                        note: 'Long-acting maintenance option for selected people who are already virologically suppressed. It is not used to start therapy in unsuppressed HIV.'
-                    }
-                ]
-            },
-            {
-                name: 'HIV prevention',
-                agents: [
-                    {
-                        name: 'F/TDF PrEP',
-                        examples: 'Emtricitabine/tenofovir disoproxil fumarate',
-                        coverage: {prepSex: 'good', prepInjection: 'good', hbv: 'good'},
-                        note: 'Daily oral PrEP option with broad CDC-recommended use across sexual and injection-drug risk. Check HIV status before starting and monitor renal function.'
+                        name: 'Injectable PrEP',
+                        examples: 'Long-acting cabotegravir',
+                        coverage: {prep: 'good'},
+                        note: 'Useful when daily oral adherence, renal disease, or patient preference makes oral PrEP less attractive.'
                     },
                     {
-                        name: 'F/TAF PrEP',
-                        examples: 'Emtricitabine/tenofovir alafenamide',
-                        coverage: {prepSex: 'some', prepInjection: 'bad', hbv: 'good'},
-                        note: 'Daily oral PrEP option for sexual transmission except receptive vaginal exposure; it has not been studied for receptive vaginal sex and is not the injection-drug PrEP standard.'
-                    },
-                    {
-                        name: 'CAB-LA PrEP',
-                        examples: 'Long-acting cabotegravir IM',
-                        coverage: {prepSex: 'good'},
-                        note: 'Injectable PrEP for sexual transmission. Particularly useful when daily oral adherence or kidney disease makes oral PrEP less attractive.'
-                    },
-                    {
-                        name: 'TDF/FTC + DTG or RAL',
-                        examples: 'Common three-drug PEP pattern',
+                        name: 'PEP regimen pattern',
+                        examples: 'TDF/FTC plus DTG or RAL; other three-drug options',
                         coverage: {pep: 'good', hbv: 'good'},
-                        note: 'CDC PEP guidance emphasizes prompt initiation and a full three-drug course after a qualifying exposure. Do not delay the first dose for nonessential testing.'
+                        note: 'Start promptly after a qualifying exposure. Do not delay the first dose for nonessential testing.'
                     }
                 ]
             },
             {
-                name: 'Selected HIV-related OI prophylaxis',
+                name: 'Common prophylaxis anchors',
                 agents: [
                     {
                         name: 'TMP-SMX',
-                        examples: 'Trimethoprim-sulfamethoxazole',
-                        coverage: {pcpPrimary: 'good', toxoPrimary: 'good'},
-                        note: 'Preferred primary prophylaxis for PCP and Toxoplasma. Think: PCP when CD4 <200 off/starting ART, or <100/detectable viremia on ART; Toxo when IgG-positive and CD4 <100.'
+                        examples: 'Preferred PCP and Toxoplasma prophylaxis',
+                        coverage: {oi: 'good'},
+                        note: 'High-yield anchor: PCP at CD4 <200; Toxoplasma when IgG-positive and CD4 <100. Also covers several bacterial pathogens.'
                     },
                     {
-                        name: 'Dapsone-based prophylaxis',
-                        examples: 'Dapsone alone, or with pyrimethamine/leucovorin',
-                        coverage: {pcpPrimary: 'some', toxoPrimary: 'some'},
-                        note: 'Dapsone alone is a PCP alternative only for Toxo-seronegative patients. Add pyrimethamine/leucovorin when Toxoplasma prophylaxis is also needed. Check G6PD first.'
+                        name: 'PCP alternatives',
+                        examples: 'Atovaquone, dapsone-based regimens, pentamidine',
+                        coverage: {oi: 'some'},
+                        note: 'Alternatives are narrower. Pentamidine does not protect against Toxoplasma; dapsone needs G6PD review.'
                     },
                     {
-                        name: 'Atovaquone',
-                        examples: 'Mepron',
-                        coverage: {pcpPrimary: 'some', toxoPrimary: 'some'},
-                        note: 'Alternative for PCP prophylaxis and a lower-evidence Toxo option. Must be taken with food; cost and tolerability often matter.'
+                        name: 'MAC prophylaxis',
+                        examples: 'Azithromycin when indicated',
+                        coverage: {oi: 'some'},
+                        note: 'Only a narrow CD4 <50 scenario when ART is absent, viremic, or not expected to become suppressive promptly.'
                     },
                     {
-                        name: 'Pentamidine',
-                        examples: 'Aerosolized monthly or IV monthly',
-                        coverage: {pcpPrimary: 'some', toxoPrimary: 'bad'},
-                        note: 'PCP-only alternative for Toxoplasma-seronegative patients. It does not protect against Toxoplasma and is not a substitute for TMP-SMX when Toxo prophylaxis is needed.'
-                    },
-                    {
-                        name: 'Azithromycin / clarithromycin',
-                        examples: 'MAC prophylaxis when indicated',
-                        coverage: {macPrimary: 'good'},
-                        note: 'MAC primary prophylaxis option only in the narrow CD4 <50 scenario where ART is absent, viremic, or not expected to be suppressive. Rule out disseminated MAC before starting.'
-                    },
-                    {
-                        name: 'Rifabutin',
-                        examples: 'MAC alternative; TB interaction issues',
-                        coverage: {macPrimary: 'some', tbLtbi: 'note'},
-                        note: 'MAC alternative with major ARV interaction considerations. Rule out active TB before rifamycin monotherapy patterns.'
-                    },
-                    {
-                        name: 'Isoniazid/rifamycin LTBI regimens',
-                        examples: '3HP, 3HR, 4R, 1HP, or INH 6-9 months',
-                        coverage: {tbLtbi: 'good'},
-                        note: 'Latent TB treatment is indicated with a positive LTBI screen or close infectious TB contact after active TB is excluded. Rifamycin interactions with ART determine which regimen is realistic.'
-                    },
-                    {
-                        name: 'Itraconazole',
-                        examples: 'Histoplasma or talaromycosis prophylaxis contexts',
-                        coverage: {endemicFungal: 'some'},
-                        note: 'Selected prophylaxis in high-risk endemic settings, such as CD4 <150 with high-risk hyperendemic histoplasmosis exposure, or talaromycosis risk in hyperendemic regions.'
-                    },
-                    {
-                        name: 'Fluconazole',
-                        examples: 'Coccidioides; talaromycosis alternative',
-                        coverage: {endemicFungal: 'some'},
-                        note: 'Used for selected Coccidioides primary prophylaxis after new positive serology with CD4 <250 and no active disease; also an alternative talaromycosis prophylaxis pattern in endemic settings.'
+                        name: 'Epidemiology-driven prevention',
+                        examples: 'LTBI treatment; selected endemic fungal prophylaxis',
+                        coverage: {oi: 'note'},
+                        note: 'Use travel, residence, exposures, serologies, and local epidemiology. This is not a universal HIV prophylaxis bucket.'
                     }
                 ]
             }
@@ -1180,14 +1117,13 @@ const COVERAGE_REVIEW_TOOLS = {
             {label: 'NIH ClinicalInfo HIV treatment guidelines', url: 'https://clinicalinfo.hiv.gov/en/guidelines/adult-and-adolescent-arv'},
             {label: 'CDC Clinical Guidance for PrEP, Apr. 30, 2026', url: 'https://www.cdc.gov/hivnexus/hcp/prep/index.html'},
             {label: 'CDC Clinical Guidance for PEP', url: 'https://www.cdc.gov/hivnexus/hcp/pep/index.html'},
-            {label: 'NIH ClinicalInfo adult/adolescent OI chemoprophylaxis table, May 27, 2026', url: 'https://clinicalinfo.hiv.gov/en/guidelines/hiv-clinical-guidelines-adult-and-adolescent-opportunistic-infections/prophylaxis-prevent-first-episode?view=full'},
-            {label: 'NIH ClinicalInfo adult/adolescent opportunistic infection guidelines', url: 'https://clinicalinfo.hiv.gov/en/guidelines/adult-and-adolescent-opportunistic-infection'}
+            {label: 'NIH ClinicalInfo adult/adolescent OI chemoprophylaxis table, May 27, 2026', url: 'https://clinicalinfo.hiv.gov/en/guidelines/hiv-clinical-guidelines-adult-and-adolescent-opportunistic-infections/prophylaxis-prevent-first-episode?view=full'}
         ]
     },
     viral: {
         title: 'Other viral coverage',
-        subtitle: 'Respiratory, herpesvirus, hepatitis, and selected resistant-virus patterns.',
-        updated: '2026-06-30',
+        subtitle: 'Respiratory viruses, herpesviruses, CMV, and HBV. HCV has its own tab.',
+        updated: '2026-07-01',
         columns: [
             {id: 'flu', label: 'Influenza A/B', hint: 'Treatment or post-exposure prophylaxis, depending on agent'},
             {id: 'covid', label: 'COVID-19', hint: 'Outpatient treatment role for high-risk patients'},
@@ -1195,31 +1131,7 @@ const COVERAGE_REVIEW_TOOLS = {
             {id: 'severeHsvVzv', label: 'Severe HSV/VZV', hint: 'CNS, disseminated, or hospitalized disease'},
             {id: 'cmv', label: 'CMV', hint: 'Treatment or suppression in selected immunocompromised hosts'},
             {id: 'resistantHerpes', label: 'Resistant herpesviruses', hint: 'Acyclovir-resistant HSV/VZV or resistant CMV'},
-            {id: 'hbv', label: 'HBV', hint: 'Chronic hepatitis B activity'},
-            {id: 'hcvNoCirr', label: 'HCV no cirrhosis', hint: 'Simplified treatment-naive noncirrhotic HCV'},
-            {id: 'hcvCompCirr', label: 'HCV compensated cirrhosis', hint: 'Treatment-naive Child-Pugh A HCV'},
-            {id: 'hcvDecomp', label: 'HCV decompensated', hint: 'Child-Pugh B/C or prior decompensation'},
-            {id: 'hcvRetreat', label: 'HCV retreatment', hint: 'Selected DAA failure patterns'},
-            {id: 'hcvCoinfection', label: 'HIV/HCV', hint: 'HCV treatment in HIV coinfection'},
-            {id: 'hcvHBV', label: 'HBV screen/reactivation', hint: 'HBV screening and reactivation concern'}
-        ],
-        callouts: [
-            {
-                title: 'Simplified HCV: no cirrhosis',
-                text: 'AASLD/IDSA simplified treatment applies to treatment-naive adults with chronic HCV of any genotype who do not have cirrhosis. Core options are glecaprevir/pibrentasvir for 8 weeks or sofosbuvir/velpatasvir for 12 weeks.'
-            },
-            {
-                title: 'Simplified HCV: compensated cirrhosis',
-                text: 'Child-Pugh A patients may still fit a simplified pathway. G/P is pangenotypic for genotype 1-6; SOF/VEL is used for genotypes 1, 2, 4, 5, 6, and genotype 3 only if baseline NS5A RAS testing does not show Y93H.'
-            },
-            {
-                title: 'Do not simplify these cases',
-                text: 'Prior HCV treatment, HBsAg positivity, pregnancy, suspected HCC, transplant history, decompensated cirrhosis, and some renal/HIV drug-interaction scenarios require a more detailed pathway or specialist input.'
-            },
-            {
-                title: 'HIV/HCV coinfection',
-                text: 'Treat HCV in people with HIV, but do not interrupt ART to make HCV therapy easier. Drug interactions are central: boosted HIV regimens, efavirenz/etravirine/nevirapine, TDF renal exposure, and acid suppression can all change the best DAA choice.'
-            }
+            {id: 'hbv', label: 'HBV', hint: 'Chronic hepatitis B activity'}
         ],
         groups: [
             {
@@ -1229,125 +1141,54 @@ const COVERAGE_REVIEW_TOOLS = {
                         name: 'Oseltamivir',
                         examples: 'Oral neuraminidase inhibitor',
                         coverage: {flu: 'good'},
-                        note: 'Preferred influenza option for hospitalized patients and commonly used for high-risk outpatients. Benefit is greatest when started early, but high-risk and hospitalized patients should not wait for confirmatory testing.'
-                    },
-                    {
-                        name: 'Zanamivir',
-                        examples: 'Inhaled neuraminidase inhibitor',
-                        coverage: {flu: 'some'},
-                        note: 'Influenza A/B activity, but inhaled delivery limits use in asthma or COPD.'
-                    },
-                    {
-                        name: 'Peramivir',
-                        examples: 'IV neuraminidase inhibitor',
-                        coverage: {flu: 'some'},
-                        note: 'IV treatment option for uncomplicated influenza. Not recommended for chemoprophylaxis in CDC summary guidance.'
+                        note: 'Common influenza option, including for hospitalized or high-risk patients.'
                     },
                     {
                         name: 'Baloxavir',
                         examples: 'Cap-dependent endonuclease inhibitor',
                         coverage: {flu: 'good'},
-                        note: 'Influenza A/B option for uncomplicated disease and post-exposure prophylaxis in selected patients. CDC cautions against monotherapy in severely immunosuppressed patients.'
+                        note: 'Single-dose option for uncomplicated influenza and selected post-exposure prophylaxis.'
                     },
                     {
                         name: 'Nirmatrelvir/ritonavir',
                         examples: 'Paxlovid',
                         coverage: {covid: 'good'},
-                        note: 'Preferred oral outpatient COVID-19 treatment pattern for high-risk patients when started within the recommended symptom window. Major limitation is drug-drug interactions from ritonavir.'
+                        note: 'Preferred oral outpatient COVID-19 option for high-risk patients when interactions can be managed.'
                     },
                     {
-                        name: 'Remdesivir',
-                        examples: 'Veklury',
-                        coverage: {covid: 'good'},
-                        note: 'IV outpatient option when logistics allow and a preferred oral option cannot be used; also has inpatient roles outside this broad outpatient-focused table.'
-                    },
-                    {
-                        name: 'Molnupiravir',
-                        examples: 'Lagevrio',
+                        name: 'Remdesivir / molnupiravir',
+                        examples: 'Alternative COVID-19 treatment patterns',
                         coverage: {covid: 'some'},
-                        note: 'Alternative when preferred COVID-19 antivirals are inaccessible or inappropriate. Lower efficacy and pregnancy-related cautions limit its role.'
+                        note: 'Remdesivir is IV and logistics-heavy; molnupiravir is an alternative when preferred options are not appropriate.'
                     }
                 ]
             },
             {
-                name: 'Herpesviruses',
+                name: 'Herpesviruses and HBV',
                 agents: [
                     {
-                        name: 'Acyclovir / valacyclovir / famciclovir',
-                        examples: 'Oral HSV/VZV agents',
-                        coverage: {hsvVzv: 'good'},
-                        note: 'Core oral agents for genital herpes episodes or suppression. They control symptoms and shedding but do not eradicate latent virus.'
+                        name: 'Acyclovir family',
+                        examples: 'Acyclovir, valacyclovir, famciclovir',
+                        coverage: {hsvVzv: 'good', severeHsvVzv: 'some'},
+                        note: 'Oral agents are common for mucocutaneous HSV/VZV. IV acyclovir is the severe/CNS/disseminated pattern.'
                     },
                     {
-                        name: 'IV acyclovir',
-                        examples: 'Severe HSV/VZV disease',
-                        coverage: {severeHsvVzv: 'good'},
-                        note: 'Key agent for severe HSV disease, disseminated infection, and HSV CNS disease; renal adjustment and hydration considerations matter clinically.'
-                    },
-                    {
-                        name: 'Ganciclovir / valganciclovir',
-                        examples: 'CMV-active nucleoside analogues',
-                        coverage: {cmv: 'good', resistantHerpes: 'some'},
-                        note: 'Main CMV treatment/suppression family. Myelosuppression and resistance testing become important in prolonged or refractory disease.'
+                        name: 'Ganciclovir family',
+                        examples: 'Ganciclovir, valganciclovir',
+                        coverage: {cmv: 'good'},
+                        note: 'Main CMV treatment/suppression family. Marrow suppression and resistance become important in prolonged courses.'
                     },
                     {
                         name: 'Foscarnet / cidofovir',
                         examples: 'Resistant HSV or CMV salvage patterns',
                         coverage: {resistantHerpes: 'good', cmv: 'some'},
-                        note: 'Useful for acyclovir-resistant HSV and selected resistant CMV. Toxicity, especially renal toxicity and electrolyte issues, often drives specialist management.'
-                    }
-                ]
-            },
-            {
-                name: 'Viral hepatitis',
-                agents: [
+                        note: 'Useful for acyclovir-resistant HSV and selected resistant CMV, but toxicity often drives specialist management.'
+                    },
                     {
                         name: 'Tenofovir or entecavir',
                         examples: 'HBV nucleos(t)ide analogues',
                         coverage: {hbv: 'good'},
-                        note: 'High-barrier HBV agents. In HIV/HBV coinfection, tenofovir plus FTC or 3TC is usually built into a complete HIV regimen to avoid functional monotherapy.'
-                    },
-                    {
-                        name: 'Glecaprevir/pibrentasvir',
-                        examples: 'Mavyret: NS3/4A protease inhibitor + NS5A inhibitor',
-                        coverage: {hcvNoCirr: 'good', hcvCompCirr: 'good', hcvDecomp: 'bad', hcvCoinfection: 'some', hcvHBV: 'note'},
-                        note: 'Pangenotypic simplified option for treatment-naive adults without cirrhosis or with compensated cirrhosis. Avoid in decompensated cirrhosis and with several ARVs, including atazanavir, efavirenz, etravirine, nevirapine, and ritonavir-containing regimens.'
-                    },
-                    {
-                        name: 'Sofosbuvir/velpatasvir',
-                        examples: 'Epclusa: NS5B nucleotide polymerase inhibitor + NS5A inhibitor',
-                        coverage: {hcvNoCirr: 'good', hcvCompCirr: 'good', hcvDecomp: 'some', hcvCoinfection: 'some', hcvHBV: 'note'},
-                        note: 'Pangenotypic simplified option without cirrhosis. In compensated cirrhosis, genotype 3 requires NS5A RAS testing; Y93H pushes you out of the simplified pathway. Acid suppression and some ARV interactions matter.'
-                    },
-                    {
-                        name: 'Sofosbuvir/velpatasvir + ribavirin',
-                        examples: 'Decompensated cirrhosis pattern',
-                        coverage: {hcvDecomp: 'good', hcvCoinfection: 'some', hcvHBV: 'note'},
-                        note: 'A decompensated-cirrhosis pattern rather than a simplified-treatment regimen. Ribavirin adds major toxicity, pregnancy contraindication, and monitoring issues.'
-                    },
-                    {
-                        name: 'Sofosbuvir/velpatasvir/voxilaprevir',
-                        examples: 'Vosevi: NS5B + NS5A + NS3/4A',
-                        coverage: {hcvRetreat: 'good', hcvCoinfection: 'some', hcvHBV: 'note'},
-                        note: 'Important salvage/retreatment regimen after selected DAA failures. Not a first-line simplified regimen and protease-inhibitor content makes decompensated cirrhosis inappropriate.'
-                    },
-                    {
-                        name: 'Ledipasvir/sofosbuvir',
-                        examples: 'Harvoni: NS5A + NS5B',
-                        coverage: {hcvNoCirr: 'some', hcvCompCirr: 'some', hcvCoinfection: 'some', hcvHBV: 'note'},
-                        note: 'Still relevant for selected genotype-specific pathways, but less conceptually simple than pangenotypic G/P or SOF/VEL. Watch acid suppression and HIV medication interactions.'
-                    },
-                    {
-                        name: 'Elbasvir/grazoprevir',
-                        examples: 'Zepatier: NS5A + NS3/4A',
-                        coverage: {hcvNoCirr: 'some', hcvCompCirr: 'some', hcvCoinfection: 'some', hcvHBV: 'note'},
-                        note: 'Genotype-specific option with resistance and interaction considerations. Do not use with cobicistat, efavirenz, etravirine, nevirapine, fostemsavir, or HIV protease inhibitors.'
-                    },
-                    {
-                        name: 'HBV screening before DAAs',
-                        examples: 'HBsAg, anti-HBc, anti-HBs context',
-                        coverage: {hcvHBV: 'good'},
-                        note: 'DAA therapy can unmask HBV reactivation risk. HBsAg-positive patients are outside simplified HCV treatment algorithms and need HBV-directed evaluation/management.'
+                        note: 'High-barrier HBV agents. In HIV/HBV coinfection, tenofovir plus FTC or 3TC is usually part of a complete HIV regimen.'
                     }
                 ]
             }
@@ -1356,7 +1197,84 @@ const COVERAGE_REVIEW_TOOLS = {
             {label: 'CDC influenza antiviral summary for clinicians, Mar. 10, 2026', url: 'https://www.cdc.gov/flu/hcp/antivirals/summary-clinicians.html'},
             {label: 'CDC COVID-19 outpatient treatment clinical care', url: 'https://www.cdc.gov/covid/hcp/clinical-care/outpatient-treatment.html'},
             {label: 'CDC STI Treatment Guidelines: Herpes', url: 'https://www.cdc.gov/std/treatment-guidelines/herpes.htm'},
-            {label: 'NIH ClinicalInfo CMV disease guideline', url: 'https://clinicalinfo.hiv.gov/en/guidelines/adult-and-adolescent-opportunistic-infection/cytomegalovirus-disease'},
+            {label: 'NIH ClinicalInfo CMV disease guideline', url: 'https://clinicalinfo.hiv.gov/en/guidelines/adult-and-adolescent-opportunistic-infection/cytomegalovirus-disease'}
+        ]
+    },
+    hcv: {
+        title: 'Hepatitis C',
+        subtitle: 'A simple review of common DAA patterns and the situations that need a more careful pathway.',
+        updated: '2026-07-01',
+        columns: [
+            {id: 'simpleNoCirr', label: 'No cirrhosis', hint: 'Simplified treatment-naive noncirrhotic HCV'},
+            {id: 'compCirr', label: 'Compensated cirrhosis', hint: 'Treatment-naive Child-Pugh A HCV'},
+            {id: 'decomp', label: 'Decompensated', hint: 'Child-Pugh B/C or prior decompensation'},
+            {id: 'retreat', label: 'Retreatment', hint: 'Selected DAA failure patterns'},
+            {id: 'coinfection', label: 'HIV/HCV', hint: 'HCV treatment in HIV coinfection'},
+            {id: 'hbvScreen', label: 'HBV screen', hint: 'HBV screening and reactivation concern'}
+        ],
+        callouts: [
+            {
+                title: 'Simplified treatment',
+                text: 'Treatment-naive adults without cirrhosis often fit an 8-week G/P or 12-week SOF/VEL pathway. Compensated cirrhosis can still be simple, but genotype 3 and resistance details matter.'
+            },
+            {
+                title: 'Do not oversimplify',
+                text: 'Prior DAA therapy, decompensated cirrhosis, transplant history, pregnancy, HBsAg positivity, suspected HCC, and major interaction problems need a more detailed pathway.'
+            },
+            {
+                title: 'Before DAAs',
+                text: 'Check fibrosis/cirrhosis status, medication interactions, renal function, HBV serologies, HIV status, and whether retreatment rules apply.'
+            }
+        ],
+        groups: [
+            {
+                name: 'Common regimen concepts',
+                agents: [
+                    {
+                        name: 'Glecaprevir/pibrentasvir',
+                        examples: 'Mavyret: NS3/4A protease inhibitor + NS5A inhibitor',
+                        coverage: {simpleNoCirr: 'good', compCirr: 'good', decomp: 'bad', coinfection: 'some', hbvScreen: 'note'},
+                        note: 'Pangenotypic simplified option. Avoid in decompensated cirrhosis and with several interacting ARVs.'
+                    },
+                    {
+                        name: 'Sofosbuvir/velpatasvir',
+                        examples: 'Epclusa: NS5B nucleotide polymerase inhibitor + NS5A inhibitor',
+                        coverage: {simpleNoCirr: 'good', compCirr: 'good', decomp: 'some', coinfection: 'some', hbvScreen: 'note'},
+                        note: 'Pangenotypic simplified option. In compensated cirrhosis, genotype 3 requires NS5A RAS review in the simplified algorithm.'
+                    },
+                    {
+                        name: 'SOF/VEL + ribavirin',
+                        examples: 'Decompensated cirrhosis pattern',
+                        coverage: {decomp: 'good', coinfection: 'some', hbvScreen: 'note'},
+                        note: 'Not a simplified regimen. Ribavirin adds toxicity, teratogenicity, and monitoring burden.'
+                    },
+                    {
+                        name: 'SOF/VEL/VOX',
+                        examples: 'Vosevi: NS5B + NS5A + NS3/4A',
+                        coverage: {retreat: 'good', coinfection: 'some', hbvScreen: 'note'},
+                        note: 'Important retreatment pattern after selected DAA failures. Not a routine first-line simplified choice.'
+                    }
+                ]
+            },
+            {
+                name: 'Safety checks',
+                agents: [
+                    {
+                        name: 'HIV/HCV interaction review',
+                        examples: 'Boosters, NNRTIs, TDF exposure, acid suppression',
+                        coverage: {coinfection: 'good'},
+                        note: 'Treat HCV in people with HIV, but do not interrupt ART just to make DAA therapy easier.'
+                    },
+                    {
+                        name: 'HBV screening before DAAs',
+                        examples: 'HBsAg, anti-HBc, anti-HBs',
+                        coverage: {hbvScreen: 'good'},
+                        note: 'DAA therapy can unmask HBV reactivation risk. HBsAg-positive patients need HBV-directed management.'
+                    }
+                ]
+            }
+        ],
+        sources: [
             {label: 'AASLD/IDSA HCV simplified treatment without cirrhosis', url: 'https://www.hcvguidelines.org/guidance/simplified-hcv-treatment-for-treatment-naive-adults-without-cirrhosis/'},
             {label: 'AASLD/IDSA HCV simplified treatment with compensated cirrhosis', url: 'https://www.hcvguidelines.org/guidance/simplified-hcv-treatment-algorithm-for-treatment-naive-adults-with-compensated-cirrhosis/'},
             {label: 'AASLD/IDSA HCV guidance for HIV/HCV coinfection', url: 'https://www.hcvguidelines.org/guidance/patients-with-hiv-hcv-coinfection/'}
@@ -1467,9 +1385,9 @@ const COVERAGE_REVIEW_TOOLS = {
         ]
     },
     transplant: {
-        title: 'Solid organ transplant infection prevention',
-        subtitle: 'Common prevention, immunosuppression, and monitoring concepts by transplant type.',
-        updated: '2026-06-30',
+        title: 'Transplant essentials',
+        subtitle: 'A compact solid organ transplant prevention reference by organ type.',
+        updated: '2026-07-01',
         rowHeader: 'Topic',
         columns: [
             {id: 'heart', label: 'Heart', hint: 'Heart transplant reference'},
@@ -1480,178 +1398,108 @@ const COVERAGE_REVIEW_TOOLS = {
         callouts: [
             {
                 title: 'Timeline matters',
-                text: 'Month 0-1 is driven by donor/recipient colonization, surgery, devices, and hospital flora. Months 1-6 are classic opportunistic infection months. After 6-12 months, risk tracks net immunosuppression, rejection therapy, graft dysfunction, exposures, and prophylaxis history.'
-            },
-            {
-                title: 'CMV risk shorthand',
-                text: 'Donor-positive/recipient-negative (D+/R-) is highest risk. R+ patients can reactivate. Lung and intestinal recipients usually receive the most aggressive CMV prevention; kidney, heart, and liver prevention is more often risk-stratified by serostatus and induction/rejection therapy.'
+                text: 'Early infections are often surgical, device, donor, or hospital-flora related. Months 1-6 are the classic opportunistic infection window. Late risk follows net immunosuppression and graft problems.'
             },
             {
                 title: 'Net immunosuppression',
-                text: 'Infection risk is not one drug level. It is the sum of induction, maintenance triple therapy, lymphocyte-depleting rejection treatment, corticosteroid intensity, leukopenia, renal dysfunction, diabetes, devices, donor-derived risk, and local epidemiology.'
+                text: 'Risk is more than a tacrolimus level: induction, rejection treatment, steroids, leukopenia, renal dysfunction, diabetes, devices, and local epidemiology all matter.'
             },
             {
-                title: 'Levels vary by center',
-                text: 'Tacrolimus and mTOR target troughs below are common teaching ranges, not protocol targets. Always use the transplant team target for that organ, time from transplant, rejection history, interacting antimicrobials, renal function, and toxicity.'
+                title: 'Center protocols win',
+                text: 'CMV duration, fungal prophylaxis, and tacrolimus/mTOR targets vary by organ, time from transplant, rejection history, interactions, and center protocol.'
             }
         ],
         groups: [
             {
-                name: 'Infection prevention patterns',
+                name: 'Prevention',
                 agents: [
                     {
                         name: 'CMV prevention',
                         examples: 'Valganciclovir prophylaxis or preemptive CMV PCR strategy',
                         coverage: {heart: 'good', kidney: 'good', liver: 'good', lung: 'good'},
-                        note: 'Universal prophylaxis is common for high-risk D+/R- recipients and after lymphocyte-depleting therapy; preemptive PCR monitoring is used by some centers. Typical prophylaxis is roughly 3-6 months for kidney/heart/liver risk groups and often 6-12 months or longer-risk monitoring in lung.'
-                    },
-                    {
-                        name: 'HSV/VZV prophylaxis',
-                        examples: 'Acyclovir, valacyclovir, or valganciclovir overlap',
-                        coverage: {heart: 'some', kidney: 'some', liver: 'some', lung: 'some'},
-                        note: 'Usually covered while on CMV-active valganciclovir. If CMV prophylaxis is not being used, HSV-seropositive recipients often receive acyclovir/valacyclovir early after transplant.'
+                        note: 'D+/R- is highest risk. Lung recipients usually need the most aggressive prevention; other organs are often risk-stratified by serostatus and rejection therapy.'
                     },
                     {
                         name: 'PCP prophylaxis',
                         examples: 'TMP-SMX preferred; alternatives include atovaquone, dapsone, pentamidine',
                         coverage: {heart: 'good', kidney: 'good', liver: 'good', lung: 'good'},
-                        note: 'TMP-SMX is preferred because it also reduces many Nocardia, Toxoplasma, Listeria, and UTI risks. Many centers use at least 6-12 months; lung and some heart programs often continue longer or lifelong, especially with augmented immunosuppression.'
+                        note: 'Routine after solid organ transplant. Lung and some heart programs often continue longer; restart the conversation after rejection treatment.'
                     },
                     {
-                        name: 'Toxoplasma prevention',
-                        examples: 'Heart D+/R- is the classic high-risk scenario',
+                        name: 'Toxoplasma / donor serology',
+                        examples: 'Heart D+/R- is the classic Toxoplasma scenario',
                         coverage: {heart: 'good', kidney: 'note', liver: 'note', lung: 'note'},
-                        note: 'Heart transplant is the key solid-organ scenario because Toxoplasma can transmit from infected donor myocardium to a seronegative recipient. TMP-SMX prophylaxis usually covers this risk.'
+                        note: 'Know donor/recipient serostatus. TMP-SMX usually covers Toxoplasma risk; heart transplant is the high-yield board-style association.'
                     },
                     {
-                        name: 'Candida prophylaxis',
-                        examples: 'Fluconazole or echinocandin in selected surgical/high-risk settings',
-                        coverage: {heart: 'some', kidney: 'bad', liver: 'good', lung: 'some'},
-                        note: 'Most important in high-risk liver transplant contexts such as reoperation, renal replacement therapy, choledochojejunostomy, massive transfusion, or colonization. Not routine for uncomplicated kidney transplant.'
+                        name: 'Fungal prophylaxis',
+                        examples: 'Candida risk in liver; mold risk in lung',
+                        coverage: {heart: 'some', kidney: 'bad', liver: 'good', lung: 'good'},
+                        note: 'Liver prophylaxis is often Candida/high-surgical-risk focused. Lung prophylaxis is mold-focused. Kidney transplant rarely needs routine fungal prophylaxis.'
                     },
                     {
-                        name: 'Mold prophylaxis',
-                        examples: 'Voriconazole, posaconazole, isavuconazole, inhaled amphotericin strategies',
-                        coverage: {heart: 'some', kidney: 'bad', liver: 'some', lung: 'good'},
-                        note: 'Lung recipients have the strongest routine mold-prevention rationale because the allograft is directly exposed to airways. Heart/liver mold prophylaxis is usually risk-based; kidney transplant rarely needs routine mold prophylaxis.'
-                    },
-                    {
-                        name: 'HBV/HCV donor-recipient planning',
-                        examples: 'HBV nucleos(t)ide analogues, HBIG in selected liver cases, direct-acting antivirals',
-                        coverage: {heart: 'note', kidney: 'note', liver: 'good', lung: 'note'},
-                        note: 'Liver transplant has the most organ-specific HBV prophylaxis issues. Across organs, HCV-viremic donors can be used with planned DAA therapy; HBV core-antibody or surface-antigen scenarios need serology-guided prophylaxis and monitoring.'
-                    },
-                    {
-                        name: 'Vaccines and exposure prevention',
-                        examples: 'Influenza, COVID-19, pneumococcal, HBV, VZV, travel and food/water counseling',
+                        name: 'Vaccines and exposures',
+                        examples: 'Pre-transplant vaccines; food, water, travel, animal and soil counseling',
                         coverage: {heart: 'good', kidney: 'good', liver: 'good', lung: 'good'},
-                        note: 'Pre-transplant vaccination is ideal. After transplant, inactivated vaccines are usually delayed until immune response is more reliable; live vaccines are generally avoided after transplant.'
+                        note: 'Vaccinate before transplant when possible. Live vaccines are generally avoided after transplant; exposure history guides additional testing.'
                     }
                 ]
             },
             {
-                name: 'Common immunosuppression and typical level concepts',
+                name: 'Immunosuppression',
                 agents: [
                     {
-                        name: 'Induction: basiliximab',
-                        examples: 'IL-2 receptor antagonist; non-depleting',
+                        name: 'Induction intensity',
+                        examples: 'Basiliximab versus ATG/alemtuzumab',
                         coverage: {heart: 'some', kidney: 'good', liver: 'some', lung: 'some'},
-                        note: 'Common in kidney and selected lower-immunologic-risk recipients. Less infectious risk than lymphocyte-depleting induction, but overall risk still depends on maintenance therapy.'
+                        note: 'Lymphocyte-depleting induction increases opportunistic and viral risk more than basiliximab. Kidney transplant uses induction especially often.'
                     },
                     {
-                        name: 'Induction: ATG/alemtuzumab',
-                        examples: 'Lymphocyte-depleting induction or rejection therapy',
-                        coverage: {heart: 'some', kidney: 'good', liver: 'some', lung: 'some'},
-                        note: 'Used for higher immunologic risk, delayed graft function, sensitization, or rejection contexts. Strongly increases viral and opportunistic infection risk, often extending CMV/PCP vigilance.'
-                    },
-                    {
-                        name: 'Tacrolimus',
-                        examples: 'Calcineurin inhibitor backbone',
+                        name: 'Calcineurin inhibitor backbone',
+                        examples: 'Tacrolimus most common; cyclosporine alternative',
                         coverage: {heart: 'good', kidney: 'good', liver: 'good', lung: 'good'},
-                        note: 'Backbone for most modern SOT regimens. Teaching trough ranges: early kidney/heart/lung often about 8-12 ng/mL, liver often about 6-10; later targets often fall toward 4-8 or lower depending on organ, rejection, toxicity, and center protocol.'
+                        note: 'Drug-level targets are protocol-specific. Azoles and macrolides raise levels; rifamycins lower levels.'
                     },
                     {
-                        name: 'Cyclosporine',
-                        examples: 'Alternative calcineurin inhibitor',
-                        coverage: {heart: 'some', kidney: 'some', liver: 'some', lung: 'some'},
-                        note: 'Less common than tacrolimus in many programs but still used for intolerance or specific strategies. Trough/C2 targets are assay- and center-dependent; azoles, macrolides, and diltiazem can substantially raise levels.'
-                    },
-                    {
-                        name: 'Mycophenolate',
-                        examples: 'MMF or mycophenolic acid antimetabolite',
+                        name: 'Antimetabolite plus steroids',
+                        examples: 'Mycophenolate; prednisone or pulse steroids',
                         coverage: {heart: 'good', kidney: 'good', liver: 'some', lung: 'good'},
-                        note: 'Common part of triple therapy with tacrolimus and steroids. Main ID relevance is leukopenia and additive marrow suppression with valganciclovir or TMP-SMX.'
+                        note: 'Mycophenolate, valganciclovir, and TMP-SMX can all contribute to leukopenia. Steroid pulses increase infection risk and can reset prophylaxis needs.'
                     },
                     {
-                        name: 'Corticosteroids',
-                        examples: 'Prednisone maintenance or pulse therapy for rejection',
-                        coverage: {heart: 'good', kidney: 'good', liver: 'some', lung: 'good'},
-                        note: 'Dose and duration strongly affect infection risk. Pulse steroids for rejection can reset the opportunistic infection clock and often prompts renewed prophylaxis review.'
-                    },
-                    {
-                        name: 'mTOR inhibitors',
-                        examples: 'Sirolimus, everolimus',
-                        coverage: {heart: 'some', kidney: 'some', liver: 'some', lung: 'note'},
-                        note: 'Used for CNI minimization, malignancy/CAV strategies, or renal-sparing approaches. Typical trough targets are often around 3-8 ng/mL when combined with reduced CNI, but protocols vary; early lung use may be limited by airway-healing concerns.'
-                    },
-                    {
-                        name: 'Belatacept',
-                        examples: 'Costimulation blocker',
-                        coverage: {heart: 'bad', kidney: 'good', liver: 'bad', lung: 'bad'},
-                        note: 'Kidney-focused CNI-sparing option. Requires EBV-seropositive status because EBV-seronegative use is associated with excess PTLD risk.'
+                        name: 'CNI-sparing agents',
+                        examples: 'mTOR inhibitors; belatacept mainly kidney',
+                        coverage: {heart: 'some', kidney: 'good', liver: 'some', lung: 'note'},
+                        note: 'Use depends on organ and complications. Belatacept requires EBV-seropositive status because of PTLD risk.'
                     }
                 ]
             },
             {
-                name: 'Post-transplant testing and monitoring',
+                name: 'Testing and monitoring',
                 agents: [
                     {
                         name: 'CMV PCR monitoring',
                         examples: 'Preemptive strategy, breakthrough disease, or after prophylaxis',
                         coverage: {heart: 'good', kidney: 'good', liver: 'good', lung: 'good'},
-                        note: 'Frequency depends on prophylaxis versus preemptive strategy and risk group. Watch especially after prophylaxis ends, after rejection therapy, and with leukopenia limiting valganciclovir.'
+                        note: 'High yield after prophylaxis ends, after rejection therapy, and when leukopenia limits valganciclovir.'
                     },
                     {
                         name: 'BK polyomavirus PCR',
                         examples: 'Plasma BK viral load surveillance',
                         coverage: {heart: 'bad', kidney: 'good', liver: 'bad', lung: 'bad'},
-                        note: 'Kidney transplant issue: screen plasma BK PCR frequently in the first year and with unexplained graft dysfunction. Main intervention is immunosuppression reduction, coordinated with the kidney transplant team.'
+                        note: 'Kidney transplant issue. Rising BK plus graft dysfunction usually prompts immunosuppression reduction with the kidney team.'
                     },
                     {
-                        name: 'EBV PCR / PTLD vigilance',
-                        examples: 'Highest concern in EBV D+/R-, children, belatacept, intense immunosuppression',
-                        coverage: {heart: 'some', kidney: 'some', liver: 'some', lung: 'some'},
-                        note: 'Not identical across centers, but EBV viral load monitoring is commonly used in high-risk mismatches or when PTLD concern exists. Interpret trends with symptoms, imaging, and immunosuppression.'
-                    },
-                    {
-                        name: 'PHS donor-derived virus NAT',
+                        name: 'Donor-derived virus testing',
                         examples: 'HIV, HBV, HCV NAT after transplant',
                         coverage: {heart: 'good', kidney: 'good', liver: 'good', lung: 'good'},
-                        note: 'U.S. Public Health Service guidance recommends post-transplant testing for HIV, HBV, and HCV infection for all recipients, generally at 4-6 weeks; liver recipients also need later HBV surveillance.'
+                        note: 'Post-transplant HIV, HBV, and HCV NAT is a core safety check. Liver recipients also need later HBV surveillance.'
                     },
                     {
-                        name: 'Pre/post serology map',
-                        examples: 'CMV, EBV, Toxoplasma, HBV, HCV, HIV, VZV/MMR immunity',
+                        name: 'Interaction and rejection checks',
+                        examples: 'Drug levels; after ATG, alemtuzumab, pulse steroids, rituximab',
                         coverage: {heart: 'good', kidney: 'good', liver: 'good', lung: 'good'},
-                        note: 'Serostatus drives prophylaxis and vaccine planning. Toxoplasma is especially important in heart; HBV/HCV are especially operationally important in liver and non-liver organs from viremic or core-antibody-positive donors.'
-                    },
-                    {
-                        name: 'TB, Strongyloides, endemic fungi',
-                        examples: 'IGRA/TST, Strongyloides IgG, Coccidioides serology, Histoplasma context',
-                        coverage: {heart: 'some', kidney: 'some', liver: 'some', lung: 'some'},
-                        note: 'Testing is epidemiology-driven: birth/residence/travel, donor risk, eosinophilia, and local endemicity. Treat latent TB and Strongyloides before transplant when possible.'
-                    },
-                    {
-                        name: 'Therapeutic drug monitoring',
-                        examples: 'Tacrolimus, cyclosporine, sirolimus, everolimus, azoles when used',
-                        coverage: {heart: 'good', kidney: 'good', liver: 'good', lung: 'good'},
-                        note: 'Many antimicrobials change immunosuppression levels: azoles and macrolides raise calcineurin/mTOR levels; rifamycins lower them. This is often the highest-yield ID safety check.'
-                    },
-                    {
-                        name: 'Rejection therapy restart check',
-                        examples: 'After ATG, alemtuzumab, high-dose steroids, plasmapheresis/rituximab',
-                        coverage: {heart: 'good', kidney: 'good', liver: 'good', lung: 'good'},
-                        note: 'Treatment for rejection increases net immunosuppression. Reassess CMV, PCP, fungal, HBV, TB, and endemic-risk prophylaxis whenever the transplant team escalates immunosuppression.'
+                        note: 'Many ID consults turn on interactions or recent rejection therapy. Reassess CMV, PCP, fungal, HBV, TB, and endemic risks whenever immunosuppression escalates.'
                     }
                 ]
             }
@@ -1668,3 +1516,73 @@ const COVERAGE_REVIEW_TOOLS = {
         ]
     }
 };
+
+/******************************************************************************\
+ * GRAM STAIN LOOKUP
+ *
+ * Teaching-oriented possibilities from early microbiology descriptors. Culture,
+ * MALDI/PCR, susceptibility testing, body site, and clinical context are needed
+ * for real organism identification.
+ \*****************************************************************************/
+const GRAM_STAIN_LOOKUP = [
+    {
+        title: 'Gram-positive cocci in clusters',
+        tags: ['positive', 'cocci', 'cluster', 'clusters', 'staph', 'grape'],
+        examples: ['Staphylococcus aureus', 'Coagulase-negative staphylococci'],
+        note: 'Classic staphylococcal morphology. Coagulase testing, culture source, and number of positive cultures matter.'
+    },
+    {
+        title: 'Gram-positive cocci in pairs/chains',
+        tags: ['positive', 'cocci', 'pair', 'pairs', 'chain', 'chains', 'strep'],
+        examples: ['Streptococcus spp.', 'Enterococcus spp.', 'Streptococcus pneumoniae'],
+        note: 'Chains suggest streptococci or enterococci. Lancet-shaped diplococci suggest pneumococcus.'
+    },
+    {
+        title: 'Gram-negative diplococci',
+        tags: ['negative', 'diplococci', 'diplococcus', 'cocci', 'neisseria'],
+        examples: ['Neisseria meningitidis', 'Neisseria gonorrhoeae', 'Moraxella catarrhalis'],
+        note: 'Source matters: CSF/blood raises meningococcus; genital specimens raise gonococcus; respiratory specimens may be Moraxella.'
+    },
+    {
+        title: 'Gram-negative lactose-fermenting rods',
+        tags: ['negative', 'rod', 'rods', 'bacilli', 'lactose', 'positive', 'fermenter', 'fermenting', 'pink'],
+        examples: ['Escherichia coli', 'Klebsiella spp.', 'Enterobacter/Klebsiella aerogenes', 'Citrobacter spp.'],
+        note: 'Think enteric gram-negative rods. Klebsiella/Enterobacter can appear mucoid; Citrobacter and Serratia may be slower lactose fermenters.'
+    },
+    {
+        title: 'Gram-negative lactose-negative rods',
+        tags: ['negative', 'rod', 'rods', 'bacilli', 'lactose', 'nonlactose', 'non-lactose', 'negative', 'nonfermenter', 'non-fermenter'],
+        examples: ['Pseudomonas aeruginosa', 'Proteus spp.', 'Salmonella spp.', 'Shigella spp.', 'Morganella/Providencia', 'Acinetobacter spp.', 'Stenotrophomonas maltophilia'],
+        note: 'This is a broad bucket. Oxidase, motility, odor/pigment, site, and biochemical or molecular ID narrow it quickly.'
+    },
+    {
+        title: 'Gram-negative coccobacilli',
+        tags: ['negative', 'coccobacilli', 'coccobacillus', 'short', 'small'],
+        examples: ['Haemophilus influenzae', 'Acinetobacter spp.', 'Bordetella pertussis', 'Brucella spp.', 'Pasteurella multocida'],
+        note: 'Clinical source and exposure history are essential: respiratory tract, animal bite, travel, or blood culture context changes the differential.'
+    },
+    {
+        title: 'Curved gram-negative rods',
+        tags: ['negative', 'curved', 'comma', 'rod', 'rods'],
+        examples: ['Vibrio spp.', 'Campylobacter spp.', 'Helicobacter pylori'],
+        note: 'Think diarrheal illness, seafood/saltwater exposure, or gastric disease depending on the clinical setting.'
+    },
+    {
+        title: 'Gram-positive rods',
+        tags: ['positive', 'rod', 'rods', 'bacilli'],
+        examples: ['Bacillus spp.', 'Clostridium spp.', 'Listeria monocytogenes', 'Corynebacterium spp.', 'Cutibacterium acnes'],
+        note: 'Can be pathogen or contaminant depending on source. Spore formation, anaerobic growth, and specimen type matter.'
+    },
+    {
+        title: 'Branching gram-positive rods',
+        tags: ['positive', 'branching', 'beaded', 'filamentous', 'rod', 'rods'],
+        examples: ['Nocardia spp.', 'Actinomyces spp.'],
+        note: 'Nocardia is aerobic and weakly acid-fast; Actinomyces is anaerobic and associated with chronic draining sinus-type infections.'
+    },
+    {
+        title: 'Yeast or fungal forms on stain',
+        tags: ['yeast', 'budding', 'hyphae', 'pseudohyphae', 'fungal', 'fungus'],
+        examples: ['Candida spp.', 'Cryptococcus spp.', 'Mold forms depending on specimen'],
+        note: 'Gram stain may show yeast, but fungal stains, antigen testing, culture, pathology, and host context usually do the real work.'
+    }
+];

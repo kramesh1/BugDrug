@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="A conceptual antimicrobial coverage review for antibacterial, HIV, antiviral, antifungal, and transplant infectious disease prevention topics. For learners.">
+    <meta name="description" content="A conceptual antimicrobial coverage review for antibacterial, HIV, hepatitis C, antiviral, antifungal, and transplant infectious disease prevention topics. For learners.">
 
     <!-- Webpage icon -->
     <link rel="apple-touch-icon" sizes="180x180" href="files/icon/apple-touch-icon.png">
@@ -39,7 +39,7 @@
       <details class="intro-box mb-3">
         <summary>About this tool &amp; how to use it</summary>
         <div class="pt-2">
-          <p class="mb-2">Use the tabs to review antibacterial, HIV, other antiviral, antifungal, and transplant
+          <p class="mb-2">Use the tabs to review antibacterial, HIV, hepatitis C, other antiviral, antifungal, and transplant
             infectious disease prevention concepts. In the bacterial tab, hover (or tap) a
             <span class="legend-chip syndromes-chip">syndrome</span>,
             <span class="legend-chip bug-chip">bacteria</span>, or
@@ -49,7 +49,7 @@
             bacteria (by real species name) or antibiotic. See the
             <a href="#" data-bs-toggle="modal" data-bs-target="#keyModal">Key</a> for what the colors mean.</p>
           <p class="text-muted small mb-1">The agents listed are designed for practice in the United States.</p>
-          <p class="text-muted small mb-0">Last updated: <mark>2026-06-30</mark>. Adapted from
+          <p class="text-muted small mb-0">Last updated: <mark>2026-07-01</mark>. Adapted from
             <a href="https://bugdrugdx.com/">bugdrugdx.com</a>; original © Hunter Ratliff 2023–2024 (MIT).</p>
         </div>
       </details>
@@ -63,6 +63,9 @@
         </li>
         <li class="nav-item" role="presentation">
           <button class="nav-link" id="viral-tab" data-bs-toggle="tab" data-bs-target="#viral-pane" type="button" role="tab" aria-controls="viral-pane" aria-selected="false">Other Viral</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="hcv-tab" data-bs-toggle="tab" data-bs-target="#hcv-pane" type="button" role="tab" aria-controls="hcv-pane" aria-selected="false">Hep C</button>
         </li>
         <li class="nav-item" role="presentation">
           <button class="nav-link" id="fungal-tab" data-bs-toggle="tab" data-bs-target="#fungal-pane" type="button" role="tab" aria-controls="fungal-pane" aria-selected="false">Fungal</button>
@@ -143,6 +146,11 @@
             <div class="search-wrap position-relative">
               <input type="search" id="bug-search" class="form-control form-control-sm" placeholder="Search bacteria by species (e.g. E. coli, MRSA, Pseudomonas)…" autocomplete="off" aria-label="Search bacteria">
               <ul id="bug-search-results" class="list-group search-results shadow" hidden></ul>
+            </div>
+            <div class="gram-lookup mt-2">
+              <label for="gram-stain-input" class="form-label small fw-semibold mb-1">Gram stain lookup</label>
+              <input type="search" id="gram-stain-input" class="form-control form-control-sm" placeholder="e.g. gram negative lactose negative rod" autocomplete="off" aria-label="Search by gram stain description">
+              <div id="gram-stain-results" class="gram-results" hidden></div>
             </div>
           </div>
 
@@ -234,6 +242,7 @@
         </div>
         <div class="tab-pane fade" id="hiv-pane" role="tabpanel" aria-labelledby="hiv-tab" tabindex="0"></div>
         <div class="tab-pane fade" id="viral-pane" role="tabpanel" aria-labelledby="viral-tab" tabindex="0"></div>
+        <div class="tab-pane fade" id="hcv-pane" role="tabpanel" aria-labelledby="hcv-tab" tabindex="0"></div>
         <div class="tab-pane fade" id="fungal-pane" role="tabpanel" aria-labelledby="fungal-tab" tabindex="0"></div>
         <div class="tab-pane fade" id="transplant-pane" role="tabpanel" aria-labelledby="transplant-tab" tabindex="0"></div>
       </div>
