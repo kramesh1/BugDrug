@@ -28,6 +28,7 @@ Then open `http://[::1]:8000/` or `http://localhost:8000/`.
 - `index.html`: static page shell, tabs, modals, and script includes.
 - `main_script.js`: rendering, search, highlighting, filtering, tab-review table generation, and route-filter behavior.
 - `styles.css`: visual styling, responsive layouts, tab styles, review tables, and coverage color classes.
+- `files/vendor/`: pinned local Bootstrap assets used so tabs and modals work without a CDN connection.
 - `files/static_objects.js`: explanatory notes and data for antibiotics, bacteria, syndromes, gram-stain lookup, HIV, HCV, viral, fungal, and transplant review tabs.
 - `files/parseCSV.js`: embedded antibacterial coverage and syndrome association matrices used by the bacterial tab.
 - `files/species_index.js`: species-name search mappings to bacterial grid categories.
@@ -51,7 +52,7 @@ Coverage labels are broad teaching labels:
 
 - `Good`: common first-line, preferred, routine, or high-yield fit.
 - `Limited`: conditional, alternative, selected-use, or variable fit.
-- `Note`: important context rather than a direct good/bad fit.
+- `Note`: important context rather than direct coverage. Note-only cells are not counted as coverage in the selected-antibiotic combination view.
 - `No`: not a meaningful routine role in this conceptual table.
 
 ## Clinical Sources
@@ -98,3 +99,5 @@ For visual/interaction checks, run the static server and verify:
 ## License
 
 MIT. See `LICENSE`.
+
+Vendored Bootstrap assets in `files/vendor/` are Bootstrap v5.3.3, MIT licensed by the Bootstrap Authors.

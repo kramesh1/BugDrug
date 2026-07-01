@@ -84,6 +84,15 @@ A second clinical accuracy pass found residual errors in the pre-existing bacter
 
 Deferred as defensible judgment calls: meropenem `DTR=some`, syndrome-grid `com/occ` nuances, and the shared `MSSA=some` label across ampicillin-sulbactam / amoxicillin-clavulanate / piperacillin-tazobactam.
 
+## Follow-up Audit Fixes (2026-07-01)
+
+- Vendored Bootstrap 5.3.3 CSS and bundle JS under `files/vendor/` and switched `index.html` to local assets so tabs and modals are not dependent on CDN availability.
+- Changed combination-view ranking so `note` cells are treated as caveats rather than coverage.
+- Demoted nitrofurantoin and oral fosfomycin organism cells to `note` because their practical role is lower-tract urinary infection, not systemic organism coverage.
+- Changed tigecycline vs `Steno` from `some` to `bad` and updated Stenotrophomonas notes to reflect current IDSA AMR guidance: cefiderocol/minocycline/TMP-SMX/levofloxacin combinations or ceftazidime-avibactam plus aztreonam, with tigecycline not counted on.
+- Changed cefiderocol vs `CRAB` from `good` to `note` and updated CRAB notes to emphasize sulbactam-durlobactam plus meropenem or imipenem-cilastatin as preferred, high-dose ampicillin-sulbactam combination therapy as an alternative, and cefiderocol as refractory/limited-use combination therapy.
+- Updated stale 2023 IDSA AMR bacterial-note links/references to the 2024 guidance.
+
 ## Source Categories Checked
 
 - 2019 ATS/IDSA CAP guideline: https://www.idsociety.org/practice-guideline/community-acquired-pneumonia-cap-in-adults/

@@ -339,11 +339,12 @@ const ANTIBIOTICS = {
         },
         abxClass: 'tetracyclines',
         comments: `If you see ID using tigecycline, it's an indicator that things probably aren't going great. Despite
-        tigecycline's broad activity (CRE, <i>Acinetobacter</i>, <i>Stenotrophomonas</i>), it's often not the best
-        option for the patient; randomized trials have shown <b>increased mortality and higher rates of failure</b> for
-        tigecycline vs other antibiotics. It therefore has a <b>black box warning</b> and the FDA advises us to
-        only use Tigecycline "in situations when alternative treatments are not suitable". It also has high rates of
-        GI side effects. Finally, despite its broad activity, it <b>lacks Pseudomonas coverage</b>.<br><br>
+        tigecycline's broad in-vitro activity (CRE, <i>Acinetobacter</i>), it's often not the best option for the
+        patient; randomized trials have shown <b>increased mortality and higher rates of failure</b> for tigecycline vs
+        other antibiotics. It therefore has a <b>black box warning</b> and the FDA advises us to only use Tigecycline
+        "in situations when alternative treatments are not suitable". It also has high rates of GI side effects.
+        Finally, despite its broad activity, it <b>lacks Pseudomonas coverage</b> and should not be counted on for
+        <i>Stenotrophomonas</i>.<br><br>
 
         <b>Eravacycline</b> is similar to tigecycline, but perhaps has fewer side effects. It's mainly used for
         intra-abdominal infections. It also has some activity for <i>Acinetobacter</i>`
@@ -474,7 +475,7 @@ const ANTIBIOTICS = {
         fullName: '',
         examples: {Nitrofurantoin: {route: "PO", trade: "Macrobid"}},
         abxClass: 'UTI-abx',
-        comments: 'Nitrofurantoin is used to treat <b>uncomplicated lower</b> urinary tract infections, namely cystitis. It has ' +
+        comments: 'Nitrofurantoin is used to treat <b>uncomplicated lower</b> urinary tract infections, namely cystitis. The grid marks susceptible organisms as a note because this is a <b>site-limited bladder drug</b>, not general organism coverage. It has ' +
         "little activity outside of the bladder, so should <b>not be used for pyelonephritis, prostatitis, or bacteremia</b>. " +
         "It is not reliable for <i>Proteus</i>, <i>Serratia</i>, or <i>Pseudomonas</i>.<br><br>" +
         "It can also be used for <b>UTI <u>prophylaxis</u></b>, although prolonged use can cause pulmonary fibrosis."
@@ -484,7 +485,7 @@ const ANTIBIOTICS = {
         fullName: '',
         examples: {Fosfomycin: {route: "PO"}},
         abxClass: 'UTI-abx',
-        comments: 'In the US, oral fosfomycin is mainly used for lower UTIs; it should not be used for pyelonephritis ' +
+        comments: 'In the US, oral fosfomycin is mainly used for lower UTIs. The grid marks susceptible organisms as a note because oral fosfomycin is <b>not systemic coverage</b>; it should not be used for pyelonephritis ' +
         "or bacteremia because systemic and renal-parenchymal levels are inadequate. Elsewhere the IV formulation is " +
         "available, which has broader uses. Oral activity is best established for <i>E. coli</i> cystitis, including " +
         "many ESBL isolates; activity against <i>Klebsiella</i>, AmpC producers, CRE, VRE, and <i>Pseudomonas</i> is more " +
@@ -552,7 +553,9 @@ const ANTIBIOTICS = {
         abxClass: 'extended', // cephalosporins
         comments: `Cefiderocol has broad gram negative activity, including steno, Acinetobacter, DTR PsA, and CRE
         (including common mechanisms of resistance such as <b>MBLs</b>, porin deletions, etc). However, it has a label
-        warning for higher all-cause mortality versus other antibiotics in critically ill patients.<br><br>
+        warning for higher all-cause mortality versus other antibiotics in critically ill patients. For CRAB, current
+        guidance generally reserves cefiderocol for refractory infections or situations where intolerance/resistance
+        precludes other agents, and it should be used as part of combination therapy.<br><br>
 
         <small>
         The mechanism of cefiderocol is highlighted by its brand name, <b class="text-danger">Fe</b><b class="text-info">troja</b>.
@@ -687,7 +690,7 @@ const BACTERIA = {
 
         Any gram negative can  harbor ESBL genes; however, they are most prevalent in Escherichia coli, Klebsiella
         pneumoniae, Klebsiella oxytoca, and Proteus mirabilis. See section 1 of the
-        <a href="https://doi.org/10.1093/cid/ciad527">2023 IDSA Guidance on the Treatment of Antimicrobial Resistant
+        <a href="https://doi.org/10.1093/cid/ciae403">2024 IDSA Guidance on the Treatment of Antimicrobial Resistant
         Gram-Negative Infections</a> for treatment details. Finally, it's important to distinguish colonization from
         true infection (which can be challenging)`
     },
@@ -709,35 +712,35 @@ const BACTERIA = {
         bugExamples: '',
         bugClass: 'GN',
         comments: `Stenotrophomonas is one of the "nonfermenting GNRs" that can be challenging to treat. It has
-        an <b>impressive amount of intrinsic resistance</b>: chromosomal beta-lactamases hydrolyzes penicillins,
-        cephalosporins, aztreonam, and carbapenems (oh and chromosomal resistance to aminoglycosides). This leaves you
-        with Bactrim, fluoroquinolones, and tetracyclines (at baseline), and this is assuming that it hasn't developed
-        efflux pumps to take these off of the table.<br><br>
+        an <b>impressive amount of intrinsic resistance</b>: chromosomal beta-lactamases hydrolyze penicillins,
+        cephalosporins, aztreonam, and carbapenems (oh and chromosomal resistance to aminoglycosides). Efflux pumps and
+        other resistance mechanisms can also reduce the activity of Bactrim, tetracyclines, and fluoroquinolones.<br><br>
 
-        <b>There is no standard of care</b> treatment (please call ID). Therapy should be guided by cultures (and often
-        use combination therapy). The best empiric agents are <b>tetracyclines</b> (mino, tige) and <b>Bactrim</b>.
+        <b>There is no standard of care</b> treatment (please call ID). Therapy should be guided by cultures and often
+        uses combination therapy, at least until clinical improvement. Current IDSA AMR guidance lists two broad preferred
+        approaches: either two active agents from cefiderocol, minocycline, TMP-SMX, or levofloxacin, or the combination
+        of ceftazidime-avibactam plus aztreonam. Tigecycline should not be counted on for <i>Stenotrophomonas</i>.
         Additionally, although steno can cause severe infections, it can sometimes be a colonizing organism and not
-        implicated in a true infection.
-
-        <br><br>Note: In theory, the combination of ceftazidime-avibactam and aztreonam can be used. Avibactam blocks
-        the L2 serine BL from hydrolyzing aztreonam (see question 6.6 of the 2023 IDSA guidelines).`
+        implicated in a true infection.`
     },
     'CRAB': {
         name: 'Acinetobacter Species',
         bugExamples: 'CRAB = Carbapenem resistant <i>Acinetobacter baumannii</i>',
         bugClass: 'GN',
         comments: `Acinetobacter is a difficult to treat nosocomial opportunistic infection that can cause hospital-associated pneumonia, SSTI/wound
-        infections/osteomyelitis, UTIs, meningitis, bacteremia, and more. It is one of the most resistant bacteria (along
-        with the other nonfermenting GNRs), and <b>does not have a standard of care</b>.<br><br>
+        infections/osteomyelitis, UTIs, meningitis, bacteremia, and more. It is one of the most resistant bacteria along
+        with the other nonfermenting GNRs.<br><br>
 
-        Therapy should be guided by cultures. In cases where there is susceptibility to cefepime or meropenem, those
-        agents should be used. In carbapenem resistant <i>Acinetobacter baumannii</i> (<b>CRAB</b>), potential agents
-        include cefiderocol, minocycline/tigecycline (not for bacteremia), imipenem-cilastatin, fluoroquinolones, and
-        sulbactam (see below).<br><br>
+        Therapy should be guided by cultures and ID consultation. In carbapenem resistant <i>Acinetobacter baumannii</i>
+        (<b>CRAB</b>), current IDSA AMR guidance prefers <b>sulbactam-durlobactam</b> in combination with meropenem or
+        imipenem-cilastatin. If sulbactam-durlobactam is not available, high-dose ampicillin-sulbactam plus at least one
+        other active agent is an alternative. Minocycline or high-dose tigecycline may have a role as part of combination
+        therapy, but they are not good choices for bloodstream infection. Cefiderocol is generally reserved for refractory
+        infections or when other agents cannot be used, and should be combined with another agent.<br><br>
 
-        Sulbactam has unique activity against Acinetobacter, so you can use <b>high dose Unasyn</b> (ampicillin has no
-        activity, you're just using it for the sulbactam). You may also use the double beta-lactamase inhibitor, Xacduro
-        (Sulbactam-Durlobactam); the durlobactam prevents degradation of sulbactam.`
+        Sulbactam has unique activity against Acinetobacter. With high-dose Unasyn, the sulbactam is the active component
+        (ampicillin itself is not treating Acinetobacter). Xacduro (sulbactam-durlobactam) pairs sulbactam with
+        durlobactam to protect it from degradation.`
     },
     'DTR': {
         name: 'Difficult-to-Treat Resistance Pseudomonas aeruginosa',
@@ -748,7 +751,7 @@ const BACTERIA = {
         (ceftolozane-tazobactam) is a reasonable option. Other options include Avycaz (ceftazidime-avibactam), Recarbrio
         (imipenem-cilastatin-relebactam), or cefiderocol, depending on the mechanism of resistance.<br><br>
 
-        <u>Note on terminology</u>: the 2023 IDSA guidelines define multidrug-resistant (MDR) Pseudomonas as an isolate
+        <u>Note on terminology</u>: The IDSA AMR guidance defines multidrug-resistant (MDR) Pseudomonas as an isolate
         that is resistant to at least one antibiotic in three of the five following antibiotic classes: penicillins,
         cephalosporins, fluoroquinolones, aminoglycosides, and carbapenems. DTR is an isolate that is resistant to all
         antibiotics in all five classes.`

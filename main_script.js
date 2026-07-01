@@ -38,7 +38,7 @@ const LOOKUPS = {
 const HILITE_CLASSES = ['good', 'broad', 'some', 'bad', 'na', 'com', 'occ', 'note', 'unk'];
 
 // Rank used to pick the "best" coverage across multiple selected antibiotics.
-const COVERAGE_RANK = { good: 5, broad: 4, some: 3, note: 2, bad: 1, na: 0 };
+const COVERAGE_RANK = { good: 5, broad: 4, some: 3, note: 1, bad: 0, na: 0 };
 const REVIEW_CLASS_LABELS = {
     good: 'Good',
     broad: 'Broad',
